@@ -7,3 +7,6 @@ class Wallet:
 
     def getPublicKey(self):
         return self.vk.to_string().hex()
+    #checkBalance
+
+    
