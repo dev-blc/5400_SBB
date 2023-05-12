@@ -8,3 +8,4 @@ class Chain:
     def addBlock(self):
         self.tempBlock = block.Block()
         self.tempBlock
+        

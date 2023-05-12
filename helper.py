@@ -18,11 +18,11 @@ public_key = walletInstance.getPublicKey()
 count = 0
 while(True):
     tempHash = blockInstance.calculateHash()
-    if(tempHash[:4] == "0000"):
+    if(tempHash[:8] == "00000000"):
         print(tempHash)
         break
     else:
         blockInstance.increaseNonce()
         count += 1
-        print(count)
+        # print(count)
 print(count)
