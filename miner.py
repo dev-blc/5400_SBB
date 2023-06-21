@@ -36,11 +36,9 @@ class Miner:
             while(True):
                 tempHash = blockInstance.calculateHash()
                 if(tempHash[:6] == "000000"):
-                    # bt = time.time() - ts
-                    # print(tempHash)
-                    # print(bt)
                     blockObj = blockInstance.getCurrentBlock()
-                    print(blockObj)
+                    print("MINED A NEW BLOCK ====> ", tempHash)
+                    print("BLOCK CONTENTS ====>",blockObj)
                     chainInstance.addBlock(blockObj)
 
                     # print(chainInstance.getLastBlock())
