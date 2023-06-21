@@ -1,6 +1,6 @@
-
 import wallet
 import block
+import miner
 # create a new Wallet instance
 walletInstance = wallet.Wallet()
 blockInstance = block.Block()
@@ -15,14 +15,17 @@ public_key = walletInstance.getPublicKey()
 # print(blockInstance.increaseNonce())
 # print(blockInstance.calculateHash())
 
-count = 0
-while(True):
-    tempHash = blockInstance.calculateHash()
-    if(tempHash[:8] == "00000000"):
-        print(tempHash)
-        break
-    else:
-        blockInstance.increaseNonce()
-        count += 1
-        # print(count)
-print(count)
+# count = 0
+# while(True):
+#     tempHash = blockInstance.calculateHash()
+#     if(tempHash[:4] == "0000"):
+#         print(tempHash)
+#         break
+#     else:
+#         blockInstance.increaseNonce()
+#         count += 1
+#         # print(count)
+# print(count)
+minerInstance = miner.Miner()
+# minerInstance.__init__()
+

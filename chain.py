@@ -5,7 +5,9 @@ class Chain:
     def __init__(self):
         self.blocks = []
     
-    def addBlock(self):
-        self.tempBlock = block.Block()
-        self.tempBlock
+    def addBlock(self, newBlock):
+        self.blocks.append(newBlock)
+    
+    def getLastBlock(self):
+        return self.blocks[-1]
         
