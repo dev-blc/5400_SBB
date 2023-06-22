@@ -1,50 +1,64 @@
-
 import threading
 import wallet
 import block
 import time 
 import transaction
 import chain
-chainInstance = chain.Chain()
-# create a new Wallet instance
-walletInstance = wallet.Wallet()
+# chainInstance = chain.Chain()
+# # create a new Wallet instance
+# walletInstance = wallet.Wallet()
+# # blockInstance = block.Block()
 # blockInstance = block.Block()
-blockInstance = block.Block()
 class Miner:
-    def __init__(self):
-        thread = threading.Thread(target=self.run())
-        thread.start()
+    def __init__(self, walletI, chainI):
+        self.walletInstance = walletI
+        # self.blockInstance = blockI
+        self.chainInstance = chainI
+        # thread = threading.Thread(target=self.run())
+        # thread.start()
 
     def run(self):
         count = 0
         while True:
-            txnInstance = transaction.Transaction(str(0),walletInstance.getPublicKey())
-            txnHash = txnInstance.calculateHash()
-            txnObj = txnInstance.getCurrentTxn()
+            self.txnInstance = transaction.Transaction()
+            # txnHash = txnInstance.calculateHash()
+            # txnObj = txnInstance.getCurrentTxn()
+            rewardTxn = self.addTxn(str(0),self.walletInstance.getPublicKey())
+            txnObj = self.txnInstance.getTxns()
             ts= time.time()
+            self.blockInstance = block.Block()
             if count == 0 : 
-                blockInstance.addBlock(0,ts,txnObj)
-                # print("inside0")
+                self.blockInstance.addBlock(0,0,ts,txnObj)
+                print("inside0")
                 count += 1
             else:
-                chainBlock = chainInstance.getLastBlock()
+                chainBlock = self.chainInstance.getLastBlock()
                 prev = chainBlock.get("blockHash")
-                blockInstance.addBlock(prev,ts,txnObj)
+                self.bno = chainBlock.get("block_no") + 1
+                self.blockInstance.addBlock(self.bno,prev,ts,txnObj)
                 # print(prev)
             bcount = 0 
 
             while(True):
-                tempHash = blockInstance.calculateHash()
-                if(tempHash[:6] == "000000"):
-                    blockObj = blockInstance.getCurrentBlock()
+                tempHash = self.blockInstance.calculateHash()
+                if(tempHash[:5] == "00000"):
+                    blockObj = self.blockInstance.getCurrentBlock()
                     print("MINED A NEW BLOCK ====> ", tempHash)
                     print("BLOCK CONTENTS ====>",blockObj)
-                    chainInstance.addBlock(blockObj)
+                    self.chainInstance.addBlock(blockObj)
 
                     # print(chainInstance.getLastBlock())
                     break
                 else:
-                    blockInstance.increaseNonce()
+                    self.blockInstance.increaseNonce()
                     bcount += 1
                     # print(bcount)
         # print(count)
+
+    def addTxn(self, sender, to):
+        # txnHash = self.txnInstance.calculateHash()
+        self.txnInstance.createTxn(str(sender), str(to))
+        print("txn",sender)
+        # print("bno",self.bno)
+        return self.txnInstance.getCurrentTxn()
+
