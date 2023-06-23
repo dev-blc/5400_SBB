@@ -10,4 +10,7 @@ class Chain:
     
     def getLastBlock(self):
         return self.blocks[-1]
+    
+    def getChain(self):
+        return self.blocks
         

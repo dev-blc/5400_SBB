@@ -4,9 +4,13 @@ SBB_SINGLE REMAINING
 >* addTXN function in miner.py and connect through init.py 
     - have txn instance in miner.py inside func 
     - what about the hard coded coinbase?
-* remove txn as history and try to add txn objects 
+>* remove txn as history and try to add txn objects 
     - remove the recnt edits and think of multiple txns in single shit 
 * checkBalance Function impl 
+* init.py setup 
+
+
+
 
 TRY SINGLE SBB WORKING BEFORE SUNDAY
 

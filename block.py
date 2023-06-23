@@ -7,7 +7,7 @@ class Block:
         self.prevHash = 0
         self.nonce = 0
         self.timestamp = 0
-        self.transactions = [{}]
+        # self.transactions = [{}]
         self.blockNo = 0
         # self.hash = 0
     
@@ -15,7 +15,7 @@ class Block:
         self.prevHash = prev
         # self.nonce = 0
         self.timestamp = ts
-        self.transactions.append(transactions)
+        self.transactions = transactions
         self.blockNo = bno #+= 1
 
     def increaseNonce(self):
