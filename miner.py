@@ -23,7 +23,7 @@ class Miner:
             self.txnInstance = transaction.Transaction()
             # txnHash = txnInstance.calculateHash()
             # txnObj = txnInstance.getCurrentTxn()
-            rewardTxn = self.addTxn(str(0),self.walletInstance.getPublicKey())
+            rewardTxn = self.addTxn(str(0),self.walletInstance.getPublicKey(), None)
             txnObj = self.txnInstance.getTxns()
             ts= time.time()
             self.blockInstance = block.Block()
@@ -58,10 +58,23 @@ class Miner:
                     # print(bcount)
         # print(count)
 
-    def addTxn(self, sender, to):
+    def addTxn(self, sender, to, sign):
         # txnHash = self.txnInstance.calculateHash()
-        self.txnInstance.createTxn(str(sender), str(to))
-        print("NEW TRANSACTION REQUEST FROM ============>",sender)
+        # self.txnInstance.createTxn(str(sender), str(to))
+        # print("NEW TRANSACTION REQUEST FROM ============>",sender)
         # print("bno",self.bno)
+
+        if sender == str(0):
+            self.txnInstance.createTxn(str(sender), str(to))
+            print("************** MINING REWARD TXN **************")
+        else:
+            isValid = self.walletInstance.verifySign(sign)
+            if isValid:
+                if self.walletInstance.checkBalance(self.chainInstance) >= 1:
+                    self.txnInstance.createTxn(str(sender), str(to))
+                else: 
+                    print("************** BALANCE NOT ENOUGH **************")
+            else:
+                print("************** INVALID SIGNATURE **************")
         return self.txnInstance.getCurrentTxn()
 

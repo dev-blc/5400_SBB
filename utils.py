@@ -20,7 +20,8 @@ while True:
     elif choice == "3":
         wI, cI, mI = initInstance.fetchInstances()  
         to = input("Enter to address: ") 
-        mI.addTxn(wI.getPublicKey(), to)
+        sign = wI.getPrivateKey().sign(wI.getPublicKey().encode('utf-8'))
+        mI.addTxn(wI.getPublicKey(), to, sign)
     elif choice == "0":
         break
     else:

@@ -8,22 +8,31 @@ class Wallet:
 
     def getPublicKey(self):
         return self.vk.to_string().hex()
-    
+    def getPrivateKey(self):
+        return self.sk
+    def verifySign(self, sign):
+        return self.vk.verify(sign, (self.vk.to_string().hex()).encode('utf-8'))
     def checkBalance(self,chainI):
         chain = chainI.getChain()
         #parse chain
+        temp = 0
         for block in chain:
+            # print("////In Block", block.get("block_no") )
             txns = block.get("Transaction")
             # txn = txns[-1]
             for txn in txns:
                 if txn.get("To") == self.vk.to_string().hex():
-                    self.balance += 1
+                    # print("////Found To")
+                    temp += 1
                 elif txn.get("From") == self.vk.to_string().hex():
-                    self.balance -= 1
+                    # print("////Found From")
+                    temp -= 1
         print("****************BALANCE****************")
-        print("=============>",self.balance)
+        print("=============>",temp)
+        self.balance = temp
+        return temp
+    def getBalance(self):
         return self.balance
-
 
 
     

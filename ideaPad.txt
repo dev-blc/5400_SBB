@@ -9,8 +9,11 @@ SBB_SINGLE REMAINING
 >* checkBalance Function impl 
 >* init.py setup 
 
-* How to interactive menu and dynamic function call
+>* How to interactive menu and dynamic function call
 
+* Choppy interaction between user 
+* initInstances() usage check 
+* What are the validation sthat needs to be done for the whole chain 
 
 
 
