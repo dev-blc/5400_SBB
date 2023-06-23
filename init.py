@@ -4,7 +4,7 @@ import transaction
 import miner
 import chain
 import threading
-
+import time
 
 class Node:
     def __init__(self):
@@ -23,3 +23,9 @@ class Node:
     def handleUserActions(self):
         self.minerInstance.addTxn(self.public_key,self.public_key_2)
         self.walletInstance.checkBalance(self.chainInstance)
+
+print("INIT FUNCTION OF SBB")
+print("STARTING IN DEFAULT CONFIG")
+nodeInstance = Node()
+time.sleep(10)
+nodeInstance.handleUserActions()

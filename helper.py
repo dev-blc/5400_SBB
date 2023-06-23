@@ -46,15 +46,26 @@ def handleUserActions():
 thread = threading.Thread(target=runMiner )#args= (minerInstance)
 thread.start()
 print("anyhting")
-time.sleep(20)
-print("After20")
+time.sleep(10)
+print("After10")
 # thread2 = threading.Thread(target=handleUserActions) #, args= (minerInstance)
 # thread2.start()
 
 # process1 = multiprocessing.Process(target=runMiner, args= (minerInstance))
 # process1.start()
 minerInstance.addTxn(public_key,public_key_2)
+# print("****************BALANCE*********")
+# print("=============>",walletInstance.checkBalance(chainInstance))
+time.sleep(10)
+
 print("****************BALANCE*********")
 print("=============>",walletInstance.checkBalance(chainInstance))
-
-# print("anyhting")
+print("=============>",chainInstance.getLastBlock().get("block_no"))
+# # print("anyhting")
+# while True:
+#     choice = input("Do you wnat to check balance 9 to terminate")
+#     if choice == 1:
+#         print("****************BALANCE*********")
+#         print("=============>",walletInstance.checkBalance(chainInstance))
+#     elif choice == 9:
+#         break
