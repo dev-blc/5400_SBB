@@ -14,8 +14,8 @@ class Miner:
         self.walletInstance = walletI
         # self.blockInstance = blockI
         self.chainInstance = chainI
-        # thread = threading.Thread(target=self.run())
-        # thread.start()
+        thread = threading.Thread(target=self.run)
+        thread.start()
 
     def run(self):
         count = 0
@@ -43,8 +43,11 @@ class Miner:
                 tempHash = self.blockInstance.calculateHash()
                 if(tempHash[:5] == "00000"):
                     blockObj = self.blockInstance.getCurrentBlock()
+
+                    print("******************************************")
                     print("MINED A NEW BLOCK ====> ", tempHash)
                     print("BLOCK CONTENTS ====>",blockObj)
+                    print("******************************************")
                     self.chainInstance.addBlock(blockObj)
 
                     # print(chainInstance.getLastBlock())
@@ -58,7 +61,7 @@ class Miner:
     def addTxn(self, sender, to):
         # txnHash = self.txnInstance.calculateHash()
         self.txnInstance.createTxn(str(sender), str(to))
-        print("txn",sender)
+        print("NEW TRANSACTION REQUEST FROM ============>",sender)
         # print("bno",self.bno)
         return self.txnInstance.getCurrentTxn()
 

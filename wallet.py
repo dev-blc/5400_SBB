@@ -14,11 +14,14 @@ class Wallet:
         #parse chain
         for block in chain:
             txns = block.get("Transaction")
-            txn = txns[-1]
-            if txn.get("To") == self.vk.to_string().hex():
-                self.balance += 1
-            elif txn.get("From") == self.vk.to_string().hex():
-                self.balance -= 1
+            # txn = txns[-1]
+            for txn in txns:
+                if txn.get("To") == self.vk.to_string().hex():
+                    self.balance += 1
+                elif txn.get("From") == self.vk.to_string().hex():
+                    self.balance -= 1
+        print("****************BALANCE****************")
+        print("=============>",self.balance)
         return self.balance
 
 

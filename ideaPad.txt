@@ -6,8 +6,10 @@ SBB_SINGLE REMAINING
     - what about the hard coded coinbase?
 >* remove txn as history and try to add txn objects 
     - remove the recnt edits and think of multiple txns in single shit 
-* checkBalance Function impl 
-* init.py setup 
+>* checkBalance Function impl 
+>* init.py setup 
+
+* How to interactive menu and dynamic function call
 
 
 

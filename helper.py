@@ -1,3 +1,4 @@
+import subprocess
 import wallet
 import block
 import miner
@@ -19,11 +20,11 @@ print(public_key)
 print(public_key_2)
 
 def runMiner():
-    print("In run")
+    # print("In run")
     minerInstance.run()
 
 def handleUserActions():
-    print("In hua")
+    # print("In hua")
     minerInstance.addTxn(public_key,public_key_2)
 
 # print(blockInstance.increaseNonce())
@@ -45,8 +46,10 @@ def handleUserActions():
 # # minerInstance.__init__()
 thread = threading.Thread(target=runMiner )#args= (minerInstance)
 thread.start()
-print("anyhting")
-time.sleep(10)
+# command = ["osascript", "-e", 'tell app "Terminal" to do script "python -c \\"import main; main.runMiner()\\""']
+# subprocess.Popen(command)
+# print("anyhting")
+# time.sleep(10)
 print("After10")
 # thread2 = threading.Thread(target=handleUserActions) #, args= (minerInstance)
 # thread2.start()
@@ -69,3 +72,8 @@ print("=============>",chainInstance.getLastBlock().get("block_no"))
 #         print("=============>",walletInstance.checkBalance(chainInstance))
 #     elif choice == 9:
 #         break
+
+def utilsCall():
+    print("****************BALANCE*********")
+    print("=============>",walletInstance.checkBalance(chainInstance))
+    print("=============>",chainInstance.getLastBlock().get("block_no"))
