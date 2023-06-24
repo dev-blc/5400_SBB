@@ -4,6 +4,7 @@ import block
 import time 
 import transaction
 import chain
+import transactionUTXO
 # chainInstance = chain.Chain()
 # # create a new Wallet instance
 # walletInstance = wallet.Wallet()
@@ -29,7 +30,7 @@ class Miner:
                 self.txnInstance = transaction.Transaction()
             else:
                 #utxo
-                self.txnInstance = 
+                self.txnInstance = transactionUTXO.Transaction()
             # self.txnInstance = transaction.Transaction()
             # txnHash = txnInstance.calculateHash()
             # txnObj = txnInstance.getCurrentTxn()

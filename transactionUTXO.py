@@ -5,7 +5,7 @@ class Transaction:
         self.fromAccount = str(0)
         self.toAccount = str(0)
         self.transactions = [{}]
-        # self.spentMark = None
+        self.spentMark = False
     def createTxn(self, sender, to):
         self.fromAccount = sender
         self.toAccount = to
@@ -14,14 +14,19 @@ class Transaction:
             "TXN_Hash": self.txnHash,
             "From" : self.fromAccount,
             "To" : self.toAccount,
-            # "UTXO_SPENT" : False
+            "UTXO_SPENT" : False
         })
-        # self.balances[to] += 1
-        # self.balances[sender] -= 1
-    # def addToBalances(self, chainI, sender):
-    #     chainI.addBalance(sender)
-    # def getBalances(self):
-    #     return self.balances
+    def spend(self):
+        index = 0 
+        for txn in self.transactions:
+            if txn.get("UTXO_SPENT") == False:
+                # balance += 1
+                self.transactions[index]["UTXO_SPENT"] = True
+                index +=1
+                break
+            else:
+                index += 1
+            
     def getCurrentTxn(self):
         return {
             "TXN_Hash": self.txnHash,

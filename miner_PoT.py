@@ -12,8 +12,8 @@ class MinerPoT:
         # self.blockInstance = blockI
         self.chainInstance = chainI
         self.blockTime = []
-        thread = threading.Thread(target=self.run)
-        thread.start()
+        # thread = threading.Thread(target=self.run)
+        # thread.start()
 
     def calcTruncatedHash(self, publicKey):
         self.prevBlockHash = self.chainInstance.getLastBlock().get("block_no")

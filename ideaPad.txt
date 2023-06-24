@@ -36,5 +36,7 @@ Next Tasks/
     > Change txn struct and add a UTXO field to mark spent 
     > Should be false in to and true in sender
     shoudl change whole thing of txn
+    > Version 1 - traverse 
+    > V2 - DB of UTXO
 > Protocol 
     > No idea 
