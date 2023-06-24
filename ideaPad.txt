@@ -11,14 +11,28 @@ SBB_SINGLE REMAINING
 
 >* How to interactive menu and dynamic function call
 
-* Choppy interaction between user 
-* initInstances() usage check 
-* What are the validation sthat needs to be done for the whole chain 
+>* Choppy interaction between user 
+>* initInstances() usage check 
+>* What are the validation sthat needs to be done for the whole chain 
+
+>* Block Validation ?
 
 
-
-TRY SINGLE SBB WORKING BEFORE SUNDAY
-
-
+TRY SINGLE SBB WORKING BEFORE SUNDAY - done
 AFTER SBB 
 ALL THE PEERS AND PROTOCOL SHIT
+
+Next Tasks/
+> Configurable 
+    > Modularize miner 
+    > Modularise txn and wallet maybe?
+> PoT 
+    > Implement dummy version
+    > Integrate to main
+> How to calculate Avg Block time?
+> Account Model is easy 
+    > Implement a local map 
+> UTXO
+    > Change txn struct and add a UTXO field to mark spent 
+> Protocol 
+    > No idea 

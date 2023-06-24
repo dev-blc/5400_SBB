@@ -14,6 +14,7 @@ class Miner:
         self.walletInstance = walletI
         # self.blockInstance = blockI
         self.chainInstance = chainI
+        self.blockTime = []
         thread = threading.Thread(target=self.run)
         thread.start()
 
@@ -38,10 +39,13 @@ class Miner:
                 self.blockInstance.addBlock(self.bno,prev,ts,txnObj)
                 # print(prev)
             bcount = 0 
-
+            start = time.time()
             while(True):
                 tempHash = self.blockInstance.calculateHash()
                 if(tempHash[:5] == "00000"):
+                    end = time.time()
+                    self.blockTime.append(end - start)
+                    print(">>>>>>>>>>>>>> Elapsed time: {:.2f} seconds".format(self.blockTime[-1]))
                     blockObj = self.blockInstance.getCurrentBlock()
 
                     print("******************************************")
@@ -57,7 +61,8 @@ class Miner:
                     bcount += 1
                     # print(bcount)
         # print(count)
-
+    def getBlockTime(self):
+        return self.blockTime
     def addTxn(self, sender, to, sign):
         # txnHash = self.txnInstance.calculateHash()
         # self.txnInstance.createTxn(str(sender), str(to))
