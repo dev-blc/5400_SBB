@@ -10,18 +10,27 @@ import chain
 # # blockInstance = block.Block()
 # blockInstance = block.Block()
 class Miner:
-    def __init__(self, walletI, chainI):
+    def __init__(self, walletI, chainI, txnModel):
         self.walletInstance = walletI
         # self.blockInstance = blockI
         self.chainInstance = chainI
         self.blockTime = []
+        self.txnType = txnModel
         thread = threading.Thread(target=self.run)
         thread.start()
+
 
     def run(self):
         count = 0
         while True:
-            self.txnInstance = transaction.Transaction()
+            # ADD TXN MODEL SELECTION
+            if self.txnType == "0":
+                #acc
+                self.txnInstance = transaction.Transaction()
+            else:
+                #utxo
+                self.txnInstance = 
+            # self.txnInstance = transaction.Transaction()
             # txnHash = txnInstance.calculateHash()
             # txnObj = txnInstance.getCurrentTxn()
             rewardTxn = self.addTxn(str(0),self.walletInstance.getPublicKey(), None)
@@ -68,7 +77,6 @@ class Miner:
         # self.txnInstance.createTxn(str(sender), str(to))
         # print("NEW TRANSACTION REQUEST FROM ============>",sender)
         # print("bno",self.bno)
-
         if sender == str(0):
             self.txnInstance.createTxn(str(sender), str(to))
             print("************** MINING REWARD TXN **************")
@@ -76,7 +84,7 @@ class Miner:
             isValid = self.walletInstance.verifySign(sign)
             if isValid:
                 if self.walletInstance.checkBalance(self.chainInstance) >= 1:
-                    self.txnInstance.createTxn(str(sender), str(to))
+                    self.txnInstance.createTxn(str(sender), str(to) )
                 else: 
                     print("************** BALANCE NOT ENOUGH **************")
             else:

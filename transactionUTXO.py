@@ -1,11 +1,11 @@
 import hashlib
-# ACCOUNT MODEL TXN
+# UTXO TXN
 class Transaction:
     def __init__(self):
         self.fromAccount = str(0)
         self.toAccount = str(0)
         self.transactions = [{}]
-        self.balances = {}
+        # self.spentMark = None
     def createTxn(self, sender, to):
         self.fromAccount = sender
         self.toAccount = to
@@ -13,14 +13,15 @@ class Transaction:
         self.transactions.append({
             "TXN_Hash": self.txnHash,
             "From" : self.fromAccount,
-            "To" : self.toAccount
+            "To" : self.toAccount,
+            # "UTXO_SPENT" : False
         })
-        self.balances[to] += 1
-        self.balances[sender] -= 1
+        # self.balances[to] += 1
+        # self.balances[sender] -= 1
     # def addToBalances(self, chainI, sender):
     #     chainI.addBalance(sender)
-    def getBalances(self):
-        return self.balances
+    # def getBalances(self):
+    #     return self.balances
     def getCurrentTxn(self):
         return {
             "TXN_Hash": self.txnHash,

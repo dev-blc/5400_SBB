@@ -5,7 +5,7 @@ class Wallet:
         self.sk = ecdsa.SigningKey.generate(curve=ecdsa.SECP256k1)
         self.vk = self.sk.verifying_key
         self.balance = int(0)
-
+        self.balances = {None} # SHOULD IT BE HERE?
     def getPublicKey(self):
         return self.vk.to_string().hex()
     def getPrivateKey(self):

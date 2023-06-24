@@ -27,7 +27,7 @@ class Node:
         self.public_key = self.walletInstance.getPublicKey()  
         # self.blockInstance = block.Block()
         self.chainInstance = chain.Chain()
-        self.minerInstance = miner.Miner(self.walletInstance, self.chainInstance)
+        self.minerInstance = miner.Miner(self.walletInstance, self.chainInstance, str(0))
     def handleUserActions(self):
         signature = self.walletInstance.getPrivateKey().sign((self.public_key).encode('utf-8'))
         self.minerInstance.addTxn(self.public_key,self.public_key_2, signature)

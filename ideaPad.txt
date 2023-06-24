@@ -34,5 +34,7 @@ Next Tasks/
     > Implement a local map 
 > UTXO
     > Change txn struct and add a UTXO field to mark spent 
+    > Should be false in to and true in sender
+    shoudl change whole thing of txn
 > Protocol 
     > No idea 
