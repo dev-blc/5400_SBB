@@ -30,11 +30,11 @@ class Miner:
                 self.txnInstance = transaction.Transaction()
             else:
                 #utxo
-                self.txnInstance = transactionUTXO.Transaction()
+                self.txnInstance = transactionUTXO.Transaction(self.chainInstance)
             # self.txnInstance = transaction.Transaction()
             # txnHash = txnInstance.calculateHash()
             # txnObj = txnInstance.getCurrentTxn()
-            rewardTxn = self.addTxn(str(0),self.walletInstance.getPublicKey(), None)
+            self.txnInstance.sendMinerRewards(self.walletInstance.getPublicKey())
             txnObj = self.txnInstance.getTxns()
             ts= time.time()
             self.blockInstance = block.Block()
@@ -78,17 +78,15 @@ class Miner:
         # self.txnInstance.createTxn(str(sender), str(to))
         # print("NEW TRANSACTION REQUEST FROM ============>",sender)
         # print("bno",self.bno)
-        if sender == str(0):
-            self.txnInstance.createTxn(str(sender), str(to))
-            print("************** MINING REWARD TXN **************")
+        
+        isValid = self.walletInstance.verifySign(sign)
+        if isValid:
+            if self.walletInstance.checkBalance(self.chainInstance) >= 1:
+                self.txnInstance.createTxn(str(sender), str(to) )
+            else: 
+                print("************** BALANCE NOT ENOUGH **************")
         else:
-            isValid = self.walletInstance.verifySign(sign)
-            if isValid:
-                if self.walletInstance.checkBalance(self.chainInstance) >= 1:
-                    self.txnInstance.createTxn(str(sender), str(to) )
-                else: 
-                    print("************** BALANCE NOT ENOUGH **************")
-            else:
-                print("************** INVALID SIGNATURE **************")
+            print("************** INVALID SIGNATURE **************")
+            
         return self.txnInstance.getCurrentTxn()
 

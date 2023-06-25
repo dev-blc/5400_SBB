@@ -1,13 +1,14 @@
 import hashlib
 # UTXO TXN
 class Transaction:
-    def __init__(self):
+    def __init__(self, chainI):
         self.fromAccount = str(0)
         self.toAccount = str(0)
         self.transactions = [{}]
-        self.spentMark = False
-    def createTxn(self, sender, to):
-        self.fromAccount = sender
+        self.spentMark = None
+        self.chainInstance = chainI
+    def sendMinerRewards(self,to):
+        self.fromAccount = str(0)
         self.toAccount = to
         self.txnHash = hashlib.sha256(repr(self.fromAccount + self.toAccount).encode('utf-8')).hexdigest()
         self.transactions.append({
@@ -16,22 +17,45 @@ class Transaction:
             "To" : self.toAccount,
             "UTXO_SPENT" : False
         })
-    def spend(self):
+    def createUTXOTxn(self, sender, to):
+        self.fromAccount = sender
+        self.toAccount = to
+        self.txnHash = hashlib.sha256(repr(self.fromAccount + self.toAccount).encode('utf-8')).hexdigest()
+        self.spentMark = False
+        self.transactions.append({
+            "TXN_Hash": self.txnHash,
+            "From" : self.fromAccount,
+            "To" : self.toAccount,
+            "UTXO_SPENT" : False
+        })
+    def createTxn(self, sender, to):
         index = 0 
-        for txn in self.transactions:
-            if txn.get("UTXO_SPENT") == False:
-                # balance += 1
-                self.transactions[index]["UTXO_SPENT"] = True
-                index +=1
-                break
-            else:
-                index += 1
-            
+        chain = self.chainInstance.getChain()
+        for block in chain:
+            # print("////In Block", block.get("block_no") )
+            txns = block.get("Transaction")
+            # txn = txns[-1]
+            flag = False
+            for txn in txns:
+                if txn.get("To") == sender:
+                    if txn.get("UTXO_SPENT") == False:
+                        # balance += 1
+                        self.transactions[index]["UTXO_SPENT"] = True
+                        self.spentMark = True
+                        self.createUTXOTxn(sender, to)
+                        index +=1
+                        flag = True
+                        break
+                    else:
+                        index += 1
+            if flag == False:
+                print(" !!!!!!!!!!!!!!!!! NO UNSPENT UTXO MINE MORE !!!!!!!!!!!!!!!!!")
     def getCurrentTxn(self):
         return {
             "TXN_Hash": self.txnHash,
             "From" : self.fromAccount,
-            "To" : self.toAccount
+            "To" : self.toAccount,
+            "UTXO_SPENT": self.spentMark
         }
     def getTxns(self):
         return self.transactions
