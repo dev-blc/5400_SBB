@@ -26,6 +26,7 @@ Next Tasks/
 > Configurable 
     > Modularize miner 
     > Modularise txn and wallet maybe?
+    > Add interaction module in config 
 > PoT 
     > Implement dummy version
     > Integrate to main
@@ -38,5 +39,13 @@ Next Tasks/
     shoudl change whole thing of txn
     > Version 1 - traverse 
     > V2 - DB of UTXO
-> Protocol 
+
+> Protocol - PRIORITY
     > No idea 
+> Peers 
+    > Threading and ports - PRIORITY 
+
+WORK FLOW 
+
+Cosmetics on config -> interaction module config -> touch up PoT -> Account model DB error -> v1 UTXO improve -> UTXO V2 Start -> Protocols & Peers -> PoT final -> JSON & Bytecodes 
+Protocols and peers/ port map peers 

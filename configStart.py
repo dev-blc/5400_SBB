@@ -9,6 +9,8 @@ import miner_PoT
 import init 
 import utils
 # initInstance = init.util()
+# walletInstance = wallet.Wallet()
+chainInstance = chain.Chain()
 minerChoice = None
 while True:
     print("::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::")
@@ -26,20 +28,22 @@ while True:
         minerChoice = input (" ---- CONSENSUS ALGORITHM (PoW(0) or PoT(1)) ===> ")
         txnChoice = input (" ---- BALANCES MODEL (Account(0) or UTXO(1)) ===> ")
         protocolChoice = input (" ---- PROTOCOL MODEL (JSON(0) or Byte Encoding(1)) ===> ")
-        chainInstance = chain.Chain()
-        if minerChoice == 0:
-            if txnChoice == 0: #ADD PROTOCOL WHERE 
-                if protocolChoice == 0:
+        # chainInstance = chain.Chain()
+        if minerChoice == "0":
+            print("miner pow")
+            if txnChoice == "0": #ADD PROTOCOL WHERE 
+                if protocolChoice == "0":
                     #CREATE INSTANCES
                     # PROTOCOL
                     walletInstance = wallet.Wallet()
                     minerInstance = miner.Miner(walletInstance, chainInstance, txnChoice)
+                    # activateInteraction(minerInstance,walletInstance)
                 else:
                     #CREATE INSTANCES
                     walletInstance = wallet.Wallet() #CHANGE WALLET FOR UTXO?
                     minerInstance = miner.Miner(walletInstance, chainInstance, txnChoice)
             else:
-                if protocolChoice == 0:
+                if protocolChoice == "0":
                     #CREATE INSTANCES#CHANGE WALLET FOR UTXO?
                     walletInstance = wallet.Wallet() #CHANGE WALLET FOR UTXO?
                     minerInstance = miner.Miner(walletInstance, chainInstance, txnChoice)
@@ -48,8 +52,9 @@ while True:
                     walletInstance = wallet.Wallet() #CHANGE WALLET FOR UTXO?
                     minerInstance = miner.Miner(walletInstance, chainInstance, txnChoice)
         else:
+            print("miner pot")
             if txnChoice == 0: #ADD PROTOCOL WHERE 
-                if protocolChoice == 0:
+                if protocolChoice == "0":
                     #CREATE INSTANCES
                     walletInstance = wallet.Wallet() #CHANGE WALLET FOR UTXO?
                     minerInstance = miner_PoT.MinerPoT(walletInstance, chainInstance, txnChoice)
@@ -58,7 +63,7 @@ while True:
                     walletInstance = wallet.Wallet() #CHANGE WALLET FOR UTXO?
                     minerInstance = miner_PoT.MinerPoT(walletInstance, chainInstance, txnChoice)
             else:
-                if protocolChoice == 0:
+                if protocolChoice == "0":
                     #CREATE INSTANCES
                     walletInstance = wallet.Wallet() #CHANGE WALLET FOR UTXO?
                     minerInstance = miner_PoT.MinerPoT(walletInstance, chainInstance, txnChoice)
@@ -69,3 +74,4 @@ while True:
     elif choice == "X" or choice == "x":
         print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ END ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
         break
+    # minerInstance = miner.Miner(walletInstance, chainInstance, 0)

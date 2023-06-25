@@ -7,7 +7,7 @@ import transaction
 import chain
 
 class MinerPoT:
-    def __init__(self, walletI, chainI):
+    def __init__(self, walletI, chainI, txnMode):
         self.walletInstance = walletI
         # self.blockInstance = blockI
         self.chainInstance = chainI

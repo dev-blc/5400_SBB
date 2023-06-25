@@ -5,7 +5,7 @@ class Transaction:
         self.fromAccount = str(0)
         self.toAccount = str(0)
         self.transactions = [{}]
-        self.balances = {}
+        self.balances = {None}
     def sendMinerRewards(self,to):
         self.fromAccount = str(0)
         self.toAccount = to
@@ -15,7 +15,8 @@ class Transaction:
             "From" : self.fromAccount,
             "To" : self.toAccount
         })
-        self.balances[to] += 1
+        #get balance and update
+        # self.balances.update({str(to): 1}) 
     def createTxn(self, sender, to):
         self.fromAccount = sender
         self.toAccount = to
@@ -25,8 +26,7 @@ class Transaction:
             "From" : self.fromAccount,
             "To" : self.toAccount
         })
-        self.balances[to] += 1
-        self.balances[sender] -= 1
+        # self.balances.update({str(to): 1}) 
     # def addToBalances(self, chainI, sender):
     #     chainI.addBalance(sender)
     def getBalances(self):
