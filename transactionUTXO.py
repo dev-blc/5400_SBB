@@ -41,7 +41,7 @@ class Transaction:
                     if txn.get("UTXO_SPENT") == False:
                         # balance += 1
                         self.transactions[index]["UTXO_SPENT"] = True
-                        print("|||||||| UTXO SPENT ===>"txn)
+                        print("|||||||| UTXO SPENT ===>",txn)
                         self.spentMark = True
                         self.createUTXOTxn(sender, to)
                         index +=1
