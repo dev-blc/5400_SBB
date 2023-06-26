@@ -5,6 +5,7 @@ import time
 import transaction
 import chain
 import transactionUTXO
+import accountDB
 # chainInstance = chain.Chain()
 # # create a new Wallet instance
 # walletInstance = wallet.Wallet()
@@ -15,6 +16,8 @@ class Miner:
         self.walletInstance = walletI
         # self.blockInstance = blockI
         self.chainInstance = chainI
+        self.dbInstance = accountDB.AccountModel(chainI)
+
         self.blockTime = []
         self.txnType = txnModel
         thread = threading.Thread(target=self.run)
@@ -27,7 +30,7 @@ class Miner:
             # ADD TXN MODEL SELECTION
             if self.txnType == "0":
                 #acc
-                self.txnInstance = transaction.Transaction()
+                self.txnInstance = transaction.Transaction(self.dbInstance)
             else:
                 #utxo
                 self.txnInstance = transactionUTXO.Transaction(self.chainInstance)
@@ -71,6 +74,8 @@ class Miner:
                     bcount += 1
                     # print(bcount)
         # print(count)
+    def getAccountBalances(self):
+        self.txnInstance.getBalances()
     def getBlockTime(self):
         return self.blockTime
     def addTxn(self, sender, to, sign):
@@ -87,6 +92,6 @@ class Miner:
                 print("************** BALANCE NOT ENOUGH **************")
         else:
             print("************** INVALID SIGNATURE **************")
-            
+
         return self.txnInstance.getCurrentTxn()
 

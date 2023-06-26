@@ -10,12 +10,53 @@ import init
 import utils
 import psutil
 # initInstance = init.util()
-# walletInstance = wallet.Wallet()
+walletInstance = None
+minerInstance = None
 chainInstance = chain.Chain()
 minerChoice = None
 def printCPU():
         cpu_percent = psutil.cpu_percent()
         print(f"CPU Usage: {cpu_percent}%")
+def localMenu():
+    while True:
+        print("MENU")
+        print("1. Check Balance")
+        print("2. TXN")
+        print("3. TXN DOS")
+        print("4. AVG BlockTime")
+        print("0. Exit")
+
+        choice = input("Enter your choice: ")
+        if choice == "1":
+            print(minerInstance.dbInstance.balances)
+        elif choice == "2":
+            sign = walletInstance.getPrivateKey().sign(walletInstance.getPublicKey().encode('utf-8'))
+            minerInstance.addTxn(walletInstance.getPublicKey(), "640c8d9619bb9f46bf9e29010dddcaddbadd05f201a6a2f5f9de3e4ed7f1cde320f21b097b6b650e08cacdc14fde630ad0869155a46c3af04014fc96e93e3fb1", sign)
+        # elif choice == "3":
+        #     wI, cI, mI = initInstance.fetchInstances()  
+        #     to = input("Enter to address: ") 
+        #     sign = wI.getPrivateKey().sign(wI.getPublicKey().encode('utf-8'))
+        #     mI.addTxn(wI.getPublicKey(), to, sign)
+        # elif choice == "4":
+        #     wI, cI, mI = initInstance.fetchInstances()  
+        #     to = input("Enter to address: ") 
+        #     sign = wI.getPrivateKey().sign(wI.getPublicKey().encode('utf-8'))
+        #     mI.addTxn(wI.getPublicKey(), to, sign)
+        #     mI.addTxn(wI.getPublicKey(), to, sign)
+        #     mI.addTxn(wI.getPublicKey(), to, sign)
+        #     mI.addTxn(wI.getPublicKey(), to, sign)
+        #     mI.addTxn(wI.getPublicKey(), to, sign)
+        #     mI.addTxn(wI.getPublicKey(), to, sign)
+        elif choice == "4":
+            # wI, cI, mI = initInstance.fetchInstances()
+            bno = chainInstance.getLastBlock().get("block_no") + 1
+            blockTime = minerInstance.getBlockTime()
+            bTAvg = sum(blockTime)/bno
+            print(">>>>>>>>>>>>>>>>AVG BLOCK TIME => ",bTAvg)
+        elif choice == "0":
+            break
+        else:
+            print("Invalid choice. Please try again.")
 while True:
     printCPU()
     print("::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::")
@@ -43,6 +84,7 @@ while True:
                     # print("whatbef")
                     walletInstance = wallet.Wallet()
                     minerInstance = miner.Miner(walletInstance, chainInstance, txnChoice)
+                    localMenu()
                     # activateInteraction(minerInstance,walletInstance)
                     # print("what")
                     # time.sleep(10)
@@ -53,11 +95,14 @@ while True:
                     #CREATE INSTANCES
                     walletInstance = wallet.Wallet() #CHANGE WALLET FOR UTXO?
                     minerInstance = miner.Miner(walletInstance, chainInstance, txnChoice)
+                    localMenu()                     
+
             else:
                 if protocolChoice == "0":
                     #CREATE INSTANCES#CHANGE WALLET FOR UTXO?
                     walletInstance = wallet.Wallet() #CHANGE WALLET FOR UTXO?
                     minerInstance = miner.Miner(walletInstance, chainInstance, txnChoice)
+                    localMenu()
                     # time.sleep(10)
                     # print("Aftre10")
                     # sign = walletInstance.getPrivateKey().sign(walletInstance.getPublicKey().encode('utf-8'))
@@ -67,6 +112,7 @@ while True:
                     #CREATE INSTANCES
                     walletInstance = wallet.Wallet() #CHANGE WALLET FOR UTXO?
                     minerInstance = miner.Miner(walletInstance, chainInstance, txnChoice)
+                    localMenu()
         else:
             print("miner pot")
             if txnChoice == 0: #ADD PROTOCOL WHERE 
@@ -74,19 +120,23 @@ while True:
                     #CREATE INSTANCES
                     walletInstance = wallet.Wallet() #CHANGE WALLET FOR UTXO?
                     minerInstance = miner_PoT.MinerPoT(walletInstance, chainInstance, txnChoice)
+                    localMenu()
                 else:
                     #CREATE INSTANCES
                     walletInstance = wallet.Wallet() #CHANGE WALLET FOR UTXO?
                     minerInstance = miner_PoT.MinerPoT(walletInstance, chainInstance, txnChoice)
+                    localMenu()
             else:
                 if protocolChoice == "0":
                     #CREATE INSTANCES
                     walletInstance = wallet.Wallet() #CHANGE WALLET FOR UTXO?
                     minerInstance = miner_PoT.MinerPoT(walletInstance, chainInstance, txnChoice)
+                    localMenu()
                 else:
                     #CREATE INSTANCES
                     walletInstance = wallet.Wallet() #CHANGE WALLET FOR UTXO?
                     minerInstance = miner_PoT.MinerPoT(walletInstance, chainInstance, txnChoice)
+                    localMenu()
     elif choice == "X" or choice == "x":
         print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ END ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
         break

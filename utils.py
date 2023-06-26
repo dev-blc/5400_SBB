@@ -11,7 +11,7 @@ def menu():
         print("1. Initialize Miner")
         print("2. Perform Other Action")
         print("3. TXN")
-        print("4. TXN DOS")
+        print("4. GET BALANCES OF ADDRESSES")
         print("5. AVG BlockTime")
         print("0. Exit")
 
@@ -27,14 +27,7 @@ def menu():
             mI.addTxn(wI.getPublicKey(), to, sign)
         elif choice == "4":
             wI, cI, mI = initInstance.fetchInstances()  
-            to = input("Enter to address: ") 
-            sign = wI.getPrivateKey().sign(wI.getPublicKey().encode('utf-8'))
-            mI.addTxn(wI.getPublicKey(), to, sign)
-            mI.addTxn(wI.getPublicKey(), to, sign)
-            mI.addTxn(wI.getPublicKey(), to, sign)
-            mI.addTxn(wI.getPublicKey(), to, sign)
-            mI.addTxn(wI.getPublicKey(), to, sign)
-            mI.addTxn(wI.getPublicKey(), to, sign)
+            print(">>>>>>>>>>>>>>>>BALANCES OF ADDRESSES => ",mI.getAccountBalances())
         elif choice == "5":
             wI, cI, mI = initInstance.fetchInstances()
             bno = cI.getLastBlock().get("block_no") + 1

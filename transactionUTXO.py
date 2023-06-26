@@ -51,6 +51,8 @@ class Transaction:
                         index += 1
             if flag == False:
                 print(" !!!!!!!!!!!!!!!!! NO UNSPENT UTXO MINE MORE !!!!!!!!!!!!!!!!!")
+            else :
+                break
     def getCurrentTxn(self):
         return {
             "TXN_Hash": self.txnHash,

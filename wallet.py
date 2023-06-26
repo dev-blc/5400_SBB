@@ -31,8 +31,8 @@ class Wallet:
         print("=============>",temp)
         self.balance = temp
         return temp
-    def getBalance(self):
-        return self.balance
+    # def getBalance(self):
+    #     return self.balance
 
 
     

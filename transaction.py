@@ -1,11 +1,13 @@
 import hashlib
 # ACCOUNT MODEL TXN
+
 class Transaction:
-    def __init__(self):
+    def __init__(self, dbI):
         self.fromAccount = str(0)
         self.toAccount = str(0)
         self.transactions = [{}]
-        self.balances = {None}
+        self.dbInstance = dbI
+
     def sendMinerRewards(self,to):
         self.fromAccount = str(0)
         self.toAccount = to
@@ -15,8 +17,10 @@ class Transaction:
             "From" : self.fromAccount,
             "To" : self.toAccount
         })
+        self.dbInstance.minerRewardUpdate(to)
+
         #get balance and update
-        # self.balances.update({str(to): 1}) 
+        # self.chainInstance.balances.update({str(to): 1})
     def createTxn(self, sender, to):
         self.fromAccount = sender
         self.toAccount = to
@@ -26,11 +30,12 @@ class Transaction:
             "From" : self.fromAccount,
             "To" : self.toAccount
         })
-        # self.balances.update({str(to): 1}) 
+        self.dbInstance.transferBalance(sender, to)
+        # self.chainInstance.balances.update({str(to): 1})
     # def addToBalances(self, chainI, sender):
     #     chainI.addBalance(sender)
-    def getBalances(self):
-        return self.balances
+    # def getBalances(self):
+    #     return self.chainInstance.balances
     def getCurrentTxn(self):
         return {
             "TXN_Hash": self.txnHash,
