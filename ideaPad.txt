@@ -24,21 +24,21 @@ ALL THE PEERS AND PROTOCOL SHIT
 
 Next Tasks/
 > Configurable 
-    > Modularize miner 
-    > Modularise txn and wallet maybe?
-    > Add interaction module in config 
-> PoT 
+    > Modularize miner                                  /MEDIUM DONE CAN DO BETTER
+    > Modularise txn and wallet maybe?                  
+    > Add interaction module in config                  /MEDIUM DONE
+> PoT                                                   /NEEDS PEERS & PROTOCOL
     > Implement dummy version
     > Integrate to main
-> How to calculate Avg Block time?
-> Account Model is easy 
-    > Implement a local map 
-> UTXO
+> How to calculate Avg Block time?                      /DONE
+> Account Model is easy     
+    > Implement a local map                             /DONE
+> UTXO                                                  /95% DONE 
     > Change txn struct and add a UTXO field to mark spent 
     > Should be false in to and true in sender
     shoudl change whole thing of txn
-    > Version 1 - traverse 
-    > V2 - DB of UTXO
+    > Version 1 - traverse                              /DONE
+    > V2 - DB of UTXO                                   /NOT STARTED - SEPERATE MODULE
 
 > Protocol - PRIORITY
     > No idea 

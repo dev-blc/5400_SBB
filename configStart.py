@@ -9,15 +9,19 @@ import miner_PoT
 import init 
 import utils
 import psutil
+import peers
 # initInstance = init.util()
 walletInstance = None
 minerInstance = None
 chainInstance = chain.Chain()
+peerInstance = None
+portNo = None
 minerChoice = None
 def printCPU():
         cpu_percent = psutil.cpu_percent()
         print(f"CPU Usage: {cpu_percent}%")
 def localMenu():
+    
     while True:
         print("MENU")
         print("1. Check Balance")
@@ -62,6 +66,7 @@ while True:
     print("::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::")
     print(":::::::::::::::::::::::::::::::::::::: SBB BLOCKCHAIN ::::::::::::::::::::::::::::::::::::::")
     print("::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::")
+    portNo = int(input("######## ENTER HOST PORT NUMBER "))
     print("===> ENTER 0 TO START THE CHAIN IN DEFAULT CONFIGURATION")
     print("===> ENTER 1 TO START WITH CUSTOM CONFIGURATION")
     print("===> ENTER X to STOP AND EXIT")
