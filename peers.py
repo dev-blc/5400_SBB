@@ -9,11 +9,11 @@ class Peers:
         # self.chainInstance = cI
         # self.minerInstance = mI 
         # self.dbInstance = dbI
-        self.port = portNo
+        self.port = int(portNo)
         self.peers = [('127.0.0.1', 5000),('127.0.0.1', 5001), ('127.0.0.1', 5002), ('127.0.0.1', 5003)]
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.sock.bind(('127.0.0.1', self.port))
-        self.sock.settimeout(1)
+        self.sock.settimeout(100)
     def getPeers(self):
         return self.peers
     def addToPeer(self, IP, PORT):
@@ -28,7 +28,7 @@ class Peers:
 
     def receiver(self):
         # sock = socket.socket(socket.AF_INET ,socket.SOCK_DGRAM)
-        self.sock.bind(('127.0.0.1',self.port))
+        # self.sock.bind(('127.0.0.1',self.port))
         while True:
             data, address = self.sock.recvfrom(1024)
             print(f'Message [{data.decode()}] from [{address[0]}]:[{address[1]}]')

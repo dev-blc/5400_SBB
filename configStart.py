@@ -18,8 +18,10 @@ peerInstance = None
 portNo = None
 minerChoice = None
 def printCPU():
-        cpu_percent = psutil.cpu_percent()
-        print(f"CPU Usage: {cpu_percent}%")
+        cpu_percent = []
+        cpu_percent.append(psutil.cpu_percent())
+        cpuAvg = sum(cpu_percent)/len(cpu_percent)
+        print(f"CPU Usage: {cpuAvg}%")
 def localMenu():
     
     while True:
@@ -28,6 +30,7 @@ def localMenu():
         print("2. TXN")
         print("3. TXN DOS")
         print("4. AVG BlockTime")
+        print("5. Send Message")
         print("0. Exit")
 
         choice = input("Enter your choice: ")
@@ -57,16 +60,21 @@ def localMenu():
             blockTime = minerInstance.getBlockTime()
             bTAvg = sum(blockTime)/bno
             print(">>>>>>>>>>>>>>>>AVG BLOCK TIME => ",bTAvg)
+        elif choice == "5":
+            msg = input("Enter your message")
+            peerInstance.broadcastMessage(msg)
         elif choice == "0":
             break
         else:
             print("Invalid choice. Please try again.")
+portNo = int(input("######## ENTER HOST PORT NUMBER "))
+peerInstance = peers.Peers(portNo)
 while True:
-    printCPU()
+    # printCPU()
     print("::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::")
     print(":::::::::::::::::::::::::::::::::::::: SBB BLOCKCHAIN ::::::::::::::::::::::::::::::::::::::")
     print("::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::")
-    portNo = int(input("######## ENTER HOST PORT NUMBER "))
+    
     print("===> ENTER 0 TO START THE CHAIN IN DEFAULT CONFIGURATION")
     print("===> ENTER 1 TO START WITH CUSTOM CONFIGURATION")
     print("===> ENTER X to STOP AND EXIT")
@@ -89,6 +97,8 @@ while True:
                     # print("whatbef")
                     walletInstance = wallet.Wallet()
                     minerInstance = miner.Miner(walletInstance, chainInstance, txnChoice)
+                    handler = threading.Thread(target=peerInstance.receiver)
+                    handler.start()
                     localMenu()
                     # activateInteraction(minerInstance,walletInstance)
                     # print("what")
@@ -107,6 +117,8 @@ while True:
                     #CREATE INSTANCES#CHANGE WALLET FOR UTXO?
                     walletInstance = wallet.Wallet() #CHANGE WALLET FOR UTXO?
                     minerInstance = miner.Miner(walletInstance, chainInstance, txnChoice)
+                    handler = threading.Thread(target=peerInstance.receiver)
+                    handler.start()
                     localMenu()
                     # time.sleep(10)
                     # print("Aftre10")
@@ -143,6 +155,7 @@ while True:
                     minerInstance = miner_PoT.MinerPoT(walletInstance, chainInstance, txnChoice)
                     localMenu()
     elif choice == "X" or choice == "x":
+        printCPU()
         print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ END ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
         break
 
