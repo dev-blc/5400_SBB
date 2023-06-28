@@ -2,7 +2,7 @@ import socket
 import threading
 import time
 import sys
-
+import protocol
 class Peers:
     def __init__(self, portNo):
         # self.walletInstance = wI
@@ -14,6 +14,7 @@ class Peers:
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.sock.bind(('127.0.0.1', self.port))
         self.sock.settimeout(100)
+        self.protocolInstance = protocol.Protocol()
     def getPeers(self):
         return self.peers
     def addToPeer(self, IP, PORT):
@@ -32,6 +33,7 @@ class Peers:
         while True:
             data, address = self.sock.recvfrom(1024)
             print(f'Message [{data.decode()}] from [{address[0]}]:[{address[1]}]')
+            self.protocolInstance.processIncomingMessage(data.decode())
             if "exit" in data.decode():
                 sys.exit()
         

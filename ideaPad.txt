@@ -43,7 +43,7 @@ Next Tasks/
 > Protocol - PRIORITY
     > No idea 
 > Peers 
-    > Threading and ports - PRIORITY 
+    > Threading and ports - PRIORITY                    /ALPHA WORKING 
 
 WORK FLOW 
 
