@@ -20,3 +20,6 @@ class Chain:
     def getChain(self):
         return self.blocks
         
+    def getBlockCount(self):
+        return len(self.blocks)
+        

@@ -1,3 +1,4 @@
+import json
 import block
 import threading
 import wallet
@@ -10,18 +11,24 @@ import init
 import utils
 import psutil
 import peers
+import state
+import protocol
 # initInstance = init.util()
 walletInstance = None
 minerInstance = None
 chainInstance = chain.Chain()
 peerInstance = None
+stateInstance = state.State()
+# protocolInstance = None
+protocolInstance = protocol.Protocol(chainInstance, stateInstance)
 portNo = None
 minerChoice = None
+cpu_percent = []
 def printCPU():
-        cpu_percent = []
         cpu_percent.append(psutil.cpu_percent())
         cpuAvg = sum(cpu_percent)/len(cpu_percent)
-        print(f"CPU Usage: {cpuAvg}%")
+        return cpuAvg
+        # print(f"CPU Usage: {cpuAvg}%")
 def localMenu():
     
     while True:
@@ -35,6 +42,7 @@ def localMenu():
 
         choice = input("Enter your choice: ")
         if choice == "1":
+            print(">>>>>>>>>>>>>>>>>> LIST OF BALANCES")
             print(minerInstance.dbInstance.balances)
         elif choice == "2":
             sign = walletInstance.getPrivateKey().sign(walletInstance.getPublicKey().encode('utf-8'))
@@ -61,26 +69,40 @@ def localMenu():
             bTAvg = sum(blockTime)/bno
             print(">>>>>>>>>>>>>>>>AVG BLOCK TIME => ",bTAvg)
         elif choice == "5":
-            msg = input("Enter your message")
+            # msg = input("Enter your message")
+            obj = chainInstance.getLastBlock()
+            pI = protocol.Protocol()
+            msg = pI.createProtocolPayload('z',obj)
+            # jsonMsg = json.dumps(msg)
             peerInstance.broadcastMessage(msg)
         elif choice == "0":
             break
         else:
             print("Invalid choice. Please try again.")
+
+start = time.time()
+print("::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::")
+print(":::::::::::::::::::::::::::::::::::::: SBB BLOCKCHAIN ::::::::::::::::::::::::::::::::::::::")
+print("::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::")
+    
 portNo = int(input("######## ENTER HOST PORT NUMBER "))
-peerInstance = peers.Peers(portNo)
+peerInstance = peers.Peers(portNo, protocolInstance)
+start = 0
+now = 0 
+
 while True:
-    # printCPU()
-    print("::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::")
-    print(":::::::::::::::::::::::::::::::::::::: SBB BLOCKCHAIN ::::::::::::::::::::::::::::::::::::::")
-    print("::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::")
+    printCPU()
     
     print("===> ENTER 0 TO START THE CHAIN IN DEFAULT CONFIGURATION")
     print("===> ENTER 1 TO START WITH CUSTOM CONFIGURATION")
-    print("===> ENTER X to STOP AND EXIT")
+    print("===> ENTER M TO MONITOR DETAILS")
+    print("===> ENTER X TO STOP AND EXIT")
     choice = input("YOUR CHOICE ==> ")
+
     if choice == "0":
-        utils.menu()
+        walletInstance = wallet.Wallet()
+        minerInstance = miner.Miner(walletInstance, chainInstance, "0")
+        localMenu()
     elif choice == "1": 
         print(" ------------------------ CONFIGURATION ------------------------ ")
         print(" ------------ CHOOSE BETWEEN THE OPTIONS WITH 0 & 1 ------------ ")
@@ -154,8 +176,12 @@ while True:
                     walletInstance = wallet.Wallet() #CHANGE WALLET FOR UTXO?
                     minerInstance = miner_PoT.MinerPoT(walletInstance, chainInstance, txnChoice)
                     localMenu()
+    elif choice == "M" or choice == "m":
+        print("------------------------------- MONITORING -------------------------------")
+        print("----> Average CPU Usage", printCPU())
+        now = time.time()
+        print("----> Time Elapsed", now - start)
     elif choice == "X" or choice == "x":
-        printCPU()
         print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ END ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
         break
 

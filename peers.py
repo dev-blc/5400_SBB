@@ -1,10 +1,11 @@
+import json
 import socket
 import threading
 import time
 import sys
 import protocol
 class Peers:
-    def __init__(self, portNo):
+    def __init__(self, portNo, pI):
         # self.walletInstance = wI
         # self.chainInstance = cI
         # self.minerInstance = mI 
@@ -14,7 +15,7 @@ class Peers:
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.sock.bind(('127.0.0.1', self.port))
         self.sock.settimeout(100)
-        self.protocolInstance = protocol.Protocol()
+        self.protocolInstance = pI
     def getPeers(self):
         return self.peers
     def addToPeer(self, IP, PORT):
@@ -25,6 +26,7 @@ class Peers:
             if(peer == ('127.0.0.1',self.port)):
                 continue
             else:
+                
                 self.sock.sendto(message.encode(), peer)
 
     def receiver(self):
