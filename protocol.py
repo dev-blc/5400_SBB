@@ -1,5 +1,5 @@
 import json
-
+import blockUtil
 class Protocol:
     def __init__(self, cI, sI) -> None:
         self.temp = None
@@ -35,11 +35,31 @@ class Protocol:
                 elif peerBlockCount == localBlockCount:
                     self.stateInstance.setCurrentState("1")
             elif opid == "b":
+                self.createProtocolPayload("h", None)
+            elif opid == "h":
                 blockHashes = self.chainInstance.getBlockHashes()
                 payloadObj = {"blockHashes": blockHashes}
                 self.createProtocolPayload("h",  json.dumps(payloadObj))  #BLOCK_HASHES
-            # elif opid == "h":
+            elif opid == "r":
+                block = self.chainInstance.getBlock(obj.get("hash"))
+                payloadObj = {"block": block}
+                self.createProtocolPayload("x",  json.dumps(payloadObj))
+            elif opid == "x":
+                #Validate block , make state change, add to chain 
+                # Verify is all txns is signed by right person 
+                isValid = blockUtil.validateBlock(obj.get("block"))
+                #Replace with exceptions 
+                if isValid:
+                    self.chainInstance.addBlock(obj.get("block")) 
+                    
 
+                # None
+            elif opid == "z":
+                block = obj
+                #Validate block , make state change, add to chain 
+                # Verify is all txns is signed by right person 
+                isValid = blockUtil.validateBlock(obj.get("block"))
+                self.chainInstance.addBlock(obj.get("block"))
 
                               
         else: 

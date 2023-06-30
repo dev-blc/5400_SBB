@@ -29,4 +29,9 @@ class Chain:
         for block in self.blocks:
             blkHashes.append(block.get("blockHash"))
         return blkHashes
+    
+    def getBlock(self, hash):
+        for block in self.blocks:
+            if block.get("blockHash") == hash:
+                return block
         

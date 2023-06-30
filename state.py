@@ -25,5 +25,7 @@ class State:
     
     # def handleMiningState(self):
 
-
+# si = State()
+# si.setCurrentState("1")
+# print(si.getCurrentState())
         

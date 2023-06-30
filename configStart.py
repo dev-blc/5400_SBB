@@ -13,12 +13,14 @@ import psutil
 import peers
 import state
 import protocol
+import protocolComms
 # initInstance = init.util()
 walletInstance = None
 minerInstance = None
 chainInstance = chain.Chain()
 peerInstance = None
 stateInstance = state.State()
+commsInstance = None
 # protocolInstance = None
 protocolInstance = protocol.Protocol(chainInstance, stateInstance)
 portNo = None
@@ -29,6 +31,14 @@ def printCPU():
         cpuAvg = sum(cpu_percent)/len(cpu_percent)
         return cpuAvg
         # print(f"CPU Usage: {cpuAvg}%")
+def getPeerInstance():
+    return peerInstance
+def getMinerInstance():
+    return minerInstance
+def getStateInstance():
+    return stateInstance
+def getInstances():
+    return walletInstance, minerInstance, chainInstance, peerInstance, stateInstance, protocolInstance, commsInstance
 def localMenu():
     
     while True:
@@ -118,9 +128,10 @@ while True:
                     # PROTOCOL
                     # print("whatbef")
                     walletInstance = wallet.Wallet()
-                    minerInstance = miner.Miner(walletInstance, chainInstance, txnChoice)
+                    minerInstance = miner.Miner(walletInstance, chainInstance, stateInstance, txnChoice)
                     handler = threading.Thread(target=peerInstance.receiver)
                     handler.start()
+                    commsInstance = protocolComms.protocolComms(stateInstance, protocolInstance)
                     localMenu()
                     # activateInteraction(minerInstance,walletInstance)
                     # print("what")
@@ -131,16 +142,20 @@ while True:
                 else:
                     #CREATE INSTANCES
                     walletInstance = wallet.Wallet() #CHANGE WALLET FOR UTXO?
-                    minerInstance = miner.Miner(walletInstance, chainInstance, txnChoice)
+                    minerInstance = miner.Miner(walletInstance, chainInstance, stateInstance, txnChoice)                    
+                    handler = threading.Thread(target=peerInstance.receiver)
+                    handler.start()
+                    commsInstance = protocolComms.protocolComms(stateInstance, protocolInstance)
                     localMenu()                     
 
             else:
                 if protocolChoice == "0":
                     #CREATE INSTANCES#CHANGE WALLET FOR UTXO?
                     walletInstance = wallet.Wallet() #CHANGE WALLET FOR UTXO?
-                    minerInstance = miner.Miner(walletInstance, chainInstance, txnChoice)
+                    minerInstance = miner.Miner(walletInstance, chainInstance, stateInstance, txnChoice)                                         
                     handler = threading.Thread(target=peerInstance.receiver)
                     handler.start()
+                    commsInstance = protocolComms.protocolComms(stateInstance, protocolInstance)
                     localMenu()
                     # time.sleep(10)
                     # print("Aftre10")
@@ -150,7 +165,10 @@ while True:
                 else:
                     #CREATE INSTANCES
                     walletInstance = wallet.Wallet() #CHANGE WALLET FOR UTXO?
-                    minerInstance = miner.Miner(walletInstance, chainInstance, txnChoice)
+                    minerInstance = miner.Miner(walletInstance, chainInstance, stateInstance, txnChoice)                                    
+                    handler = threading.Thread(target=peerInstance.receiver)
+                    handler.start()
+                    commsInstance = protocolComms.protocolComms(stateInstance, protocolInstance)
                     localMenu()
         else:
             print("miner pot")
@@ -159,22 +177,34 @@ while True:
                     #CREATE INSTANCES
                     walletInstance = wallet.Wallet() #CHANGE WALLET FOR UTXO?
                     minerInstance = miner_PoT.MinerPoT(walletInstance, chainInstance, txnChoice)
+                    handler = threading.Thread(target=peerInstance.receiver)
+                    handler.start()
+                    commsInstance = protocolComms.protocolComms(stateInstance, protocolInstance)
                     localMenu()
                 else:
                     #CREATE INSTANCES
                     walletInstance = wallet.Wallet() #CHANGE WALLET FOR UTXO?
                     minerInstance = miner_PoT.MinerPoT(walletInstance, chainInstance, txnChoice)
+                    handler = threading.Thread(target=peerInstance.receiver)
+                    handler.start()
+                    commsInstance = protocolComms.protocolComms(stateInstance, protocolInstance)
                     localMenu()
             else:
                 if protocolChoice == "0":
                     #CREATE INSTANCES
                     walletInstance = wallet.Wallet() #CHANGE WALLET FOR UTXO?
                     minerInstance = miner_PoT.MinerPoT(walletInstance, chainInstance, txnChoice)
+                    handler = threading.Thread(target=peerInstance.receiver)
+                    handler.start()
+                    commsInstance = protocolComms.protocolComms(stateInstance, protocolInstance)
                     localMenu()
                 else:
                     #CREATE INSTANCES
                     walletInstance = wallet.Wallet() #CHANGE WALLET FOR UTXO?
                     minerInstance = miner_PoT.MinerPoT(walletInstance, chainInstance, txnChoice)
+                    handler = threading.Thread(target=peerInstance.receiver)
+                    handler.start()
+                    commsInstance = protocolComms.protocolComms(stateInstance, protocolInstance)
                     localMenu()
     elif choice == "M" or choice == "m":
         print("------------------------------- MONITORING -------------------------------")

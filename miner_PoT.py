@@ -12,11 +12,11 @@ class MinerPoT:
         # self.blockInstance = blockI
         self.chainInstance = chainI
         self.blockTime = []
-        # thread = threading.Thread(target=self.run)
-        # thread.start()
+        thread = threading.Thread(target=self.run)
+        thread.start()
 
     def calcTruncatedHash(self, publicKey):
-        self.prevBlockHash = self.chainInstance.getLastBlock().get("block_no")
+        self.prevBlockHash = self.chainInstance.getLastBlock().get("blockHash")
         # self.publicKey = self.walletInstance.getPublicKey()
         concat = self.prevBlockHash + publicKey
         hashedConcat = hashlib.sha256(concat.encode()).hexdigest()
@@ -26,8 +26,8 @@ class MinerPoT:
     def run(self):
         self.bcount = 0
         while(True):
-            peers = peerInstance.getPeers()
-            min = self.calcTruncatedHash(peers[0].getPK())
+            peers = self.peerInstance.getPeers()
+            min = self.calcTruncatedHash(peers[0].getPK()) #CAN ONLY GET AS MESG
             nextMiner = peers[0].getPK()
             count = 0
             for peer in peers:

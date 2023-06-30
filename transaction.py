@@ -16,7 +16,8 @@ class Transaction:
         self.transactions.append({
             "TXN_Hash": self.txnHash,
             "From" : self.fromAccount,
-            "To" : self.toAccount
+            "To" : self.toAccount,
+            "Sign" : self.sign
         })
         self.dbInstance.minerRewardUpdate(to)
 

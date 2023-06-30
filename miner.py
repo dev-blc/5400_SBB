@@ -6,18 +6,19 @@ import transaction
 import chain
 import transactionUTXO
 import accountDB
+
 # chainInstance = chain.Chain()
 # # create a new Wallet instance
 # walletInstance = wallet.Wallet()
 # # blockInstance = block.Block()
 # blockInstance = block.Block()
 class Miner:
-    def __init__(self, walletI, chainI, txnModel):
+    def __init__(self, walletI, chainI, stateI, txnModel):
         self.walletInstance = walletI
         # self.blockInstance = blockI
         self.chainInstance = chainI
         self.dbInstance = accountDB.AccountModel(chainI)
-
+        self.stateInstance = stateI
         self.blockTime = []
         self.txnType = txnModel
         thread = threading.Thread(target=self.run)
@@ -26,6 +27,7 @@ class Miner:
 
     def run(self):
         count = 0
+        self.stateInstance.setCurrentState("1")
         while True:
             # ADD TXN MODEL SELECTION
             if self.txnType == "0":

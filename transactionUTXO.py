@@ -16,7 +16,8 @@ class Transaction:
             "TXN_Hash": self.txnHash,
             "From" : self.fromAccount,
             "To" : self.toAccount,
-            "UTXO_SPENT" : False
+            "UTXO_SPENT" : False,
+            "Sign" : self.sign
         })
     def createUTXOTxn(self, sender, to, sign):
         self.fromAccount = sender

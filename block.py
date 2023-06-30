@@ -33,7 +33,7 @@ class Block:
             "block_no" : self.blockNo,
             "nonce" : self.nonce,
             "prevHash" : self.prevHash,
-            "Transaction" : self.transactions,
+            "Transactions" : self.transactions,
             "blockHash" : self.hash
         }
         return blockObj
