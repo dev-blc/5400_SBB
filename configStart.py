@@ -71,8 +71,8 @@ def localMenu():
         elif choice == "5":
             # msg = input("Enter your message")
             obj = chainInstance.getLastBlock()
-            pI = protocol.Protocol()
-            msg = pI.createProtocolPayload('z',obj)
+            # pI = protocol.Protocol()
+            msg = protocolInstance.createProtocolPayload("a",obj)
             # jsonMsg = json.dumps(msg)
             peerInstance.broadcastMessage(msg)
         elif choice == "0":

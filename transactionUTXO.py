@@ -6,6 +6,7 @@ class Transaction:
         self.toAccount = str(0)
         self.transactions = [{}]
         self.spentMark = None
+        self.sign = None
         self.chainInstance = chainI
     def sendMinerRewards(self,to):
         self.fromAccount = str(0)
@@ -17,16 +18,18 @@ class Transaction:
             "To" : self.toAccount,
             "UTXO_SPENT" : False
         })
-    def createUTXOTxn(self, sender, to):
+    def createUTXOTxn(self, sender, to, sign):
         self.fromAccount = sender
         self.toAccount = to
         self.txnHash = hashlib.sha256(repr(self.fromAccount + self.toAccount).encode('utf-8')).hexdigest()
         self.spentMark = False
+        self.sign = sign
         self.transactions.append({
             "TXN_Hash": self.txnHash,
             "From" : self.fromAccount,
             "To" : self.toAccount,
-            "UTXO_SPENT" : False
+            "UTXO_SPENT" : False,
+            "Sign" : self.sign
         })
     def createTxn(self, sender, to):
         index = 0 
@@ -58,7 +61,8 @@ class Transaction:
             "TXN_Hash": self.txnHash,
             "From" : self.fromAccount,
             "To" : self.toAccount,
-            "UTXO_SPENT": self.spentMark
+            "UTXO_SPENT": self.spentMark,
+            "Sign" : self.sign
         }
     def getTxns(self):
         return self.transactions

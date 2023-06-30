@@ -87,7 +87,7 @@ class Miner:
         isValid = self.walletInstance.verifySign(sign)
         if isValid:
             if self.walletInstance.checkBalance(self.chainInstance) >= 1:
-                self.txnInstance.createTxn(str(sender), str(to) )
+                self.txnInstance.createTxn(str(sender), str(to), sign )
             else: 
                 print("************** BALANCE NOT ENOUGH **************")
         else:

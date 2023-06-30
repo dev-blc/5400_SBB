@@ -21,15 +21,27 @@ class Protocol:
             # print("Payload Object:", obj)
             # print("ETX:", message[-1])
             if opid == "a": # GET_COUNT
+                print("====GET_COUNT====")
                 blockCount = self.chainInstance.getBlockCount()
-                payloadObj = {"blocks", blockCount}
-                self.createProtocolPayload("c", payloadObj) 
-            if opid == "c":
+                payloadObj = {"blocks": blockCount}
+                self.createProtocolPayload("c", json.dumps(payloadObj)) 
+
+            elif opid == "c":
                 peerBlockCount = int(obj.get("blocks"))
                 localBlockCount = int(self.chainInstance.getBlockCount())
                 if peerBlockCount > localBlockCount:
-                    self.stateInstance.setCurrentState("2")
-                
+                    self.stateInstance.setCurrentState("2") # Check state instance impl
+                    self.createProtocolPayload("b", None)# Here or in stateActions()?
+                elif peerBlockCount == localBlockCount:
+                    self.stateInstance.setCurrentState("1")
+            elif opid == "b":
+                blockHashes = self.chainInstance.getBlockHashes()
+                payloadObj = {"blockHashes": blockHashes}
+                self.createProtocolPayload("h",  json.dumps(payloadObj))  #BLOCK_HASHES
+            # elif opid == "h":
+
+
+                              
         else: 
             print("Invalid message format.")
 
@@ -65,6 +77,6 @@ class Protocol:
 
 # objp = {"Key":"val","key2":"val2","Key3":"val","key4":"val2"}
 # pI = Protocol()
-# msg = pI.createProtocolPayload('z', objp)
+# msg = pI.createProtocolPayload("a", objp)
 # pI.processIncomingMessage(msg)
 # # # '\x00\x0f''z''{"Key": "val"}'
