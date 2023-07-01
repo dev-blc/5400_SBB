@@ -54,10 +54,10 @@ Protocols and peers/ port map peers
 
 >>>>>>>> TODO 29/6
 
--> Protocol if else block  -> Add create payload and broadcast message in thread 
+-> Protocol if else block  -> Add create payload and broadcast message in thread  // DONE
 -> State changes acr protocols 
 -> Modularity check 
--> Validate a block by txn signs, have utlity fileto do that 
+-> Validate a block by txn signs, have utlity file to do that 
 -> Do state manipulation and management 
 -> Update chain instance 
 -> Replace errors with exceptions

@@ -1,3 +1,3 @@
 import configStart
-def getSI():
-    return configStart.getStateInstance()
+def getPI():
+    return configStart.getPeerInstance()

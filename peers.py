@@ -35,7 +35,9 @@ class Peers:
         while True:
             data, address = self.sock.recvfrom(1024)
             print(f'Message [{data.decode()}] from [{address[0]}]:[{address[1]}]')
-            self.protocolInstance.processIncomingMessage(data.decode())
+            msg = self.protocolInstance.processIncomingMessage(data.decode())
+            self.broadcastMessage(msg)
             if "exit" in data.decode():
                 sys.exit()
+        
         

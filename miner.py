@@ -27,7 +27,7 @@ class Miner:
 
     def run(self):
         count = 0
-        self.stateInstance.setCurrentState("1")
+        # self.stateInstance.setCurrentState("1")
         while True:
             # ADD TXN MODEL SELECTION
             if self.txnType == "0":

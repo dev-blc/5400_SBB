@@ -1,5 +1,9 @@
 import json
 import blockUtil
+import state
+# import configStartUtils
+states = state.allStates
+emptyObj = json.dumps({})
 class Protocol:
     def __init__(self, cI, sI) -> None:
         self.temp = None
@@ -14,44 +18,91 @@ class Protocol:
             # print("//",message[1:3])
             # print(">>>",message[14:-2])
             obj = json.loads(message[3])
+            
             # Print the extracted components
             # print("STX:", stx)
             # print("Message Length:", msg_len)
             # print("Operation ID:", opid)
-            # print("Payload Object:", obj)
+            print("111111111Payload Object:", obj)
             # print("ETX:", message[-1])
             if opid == "a": # GET_COUNT
                 print("====GET_COUNT====")
                 blockCount = self.chainInstance.getBlockCount()
                 payloadObj = {"blocks": blockCount}
-                self.createProtocolPayload("c", json.dumps(payloadObj)) 
-
+                msg = self.createProtocolPayload("c", json.dumps(payloadObj)) 
+                print("=======",msg)
+                return msg 
             elif opid == "c":
+                obj = json.loads(obj)
                 peerBlockCount = int(obj.get("blocks"))
                 localBlockCount = int(self.chainInstance.getBlockCount())
+                print("||||||",localBlockCount,peerBlockCount)
                 if peerBlockCount > localBlockCount:
+                    
                     self.stateInstance.setCurrentState("2") # Check state instance impl
-                    self.createProtocolPayload("b", None)# Here or in stateActions()?
+                    print("========= REQUEST NEW BLOCK HASHES")
+                    msg = self.createProtocolPayload("b", emptyObj)# Here or in stateActions()?
+                    print(msg)
+                    return msg 
                 elif peerBlockCount == localBlockCount:
                     self.stateInstance.setCurrentState("1")
+                    msg = self.createProtocolPayload("a", None)
+                    return msg
+                else :
+                    block = self.chainInstance.getLastBlock()
+                    self.stateInstance.setCurrentState("1")
+                    payloadObj = {"block": block}
+                    msg = self.createProtocolPayload("z",  payloadObj)
+                    return msg 
+                    # msg = self.createProtocolPayload("a", None)
             elif opid == "b":
-                self.createProtocolPayload("h", None)
-            elif opid == "h":
+                state = self.stateInstance.getCurrentState()
+                if state == states.GBH:
+                    self.stateInstance.setCurrentState("3")
                 blockHashes = self.chainInstance.getBlockHashes()
                 payloadObj = {"blockHashes": blockHashes}
-                self.createProtocolPayload("h",  json.dumps(payloadObj))  #BLOCK_HASHES
+                msg = self.createProtocolPayload("h",  json.dumps(payloadObj))  #BLOCK_HASHES
+                return msg 
+                
+            elif opid == "h":
+                obj = json.loads(obj)
+                blockHashes = obj.get('blockHashes')
+                localBlockHashes = self.chainInstance.getBlockHashes()
+                min_length = min(len(blockHashes), len(localBlockHashes))
+                toBeFetched = []
+                for i in range(min_length):
+                    if blockHashes[i] != localBlockHashes[i]:
+                        toBeFetched.append(i)
+                    
+                if len(blockHashes) != len(localBlockHashes):
+                        toBeFetched.extend(range(min_length, max(len(blockHashes), len(localBlockHashes))))
+                # index =0 
+                for index in toBeFetched:
+                    hash = blockHashes[index]
+                    payloadObj = {"hash": hash}
+                msg = self.createProtocolPayload("r",  json.dumps(payloadObj))  #BLOCK_HASHES
+                return msg 
             elif opid == "r":
+                obj = json.loads(obj)
                 block = self.chainInstance.getBlock(obj.get("hash"))
                 payloadObj = {"block": block}
-                self.createProtocolPayload("x",  json.dumps(payloadObj))
+                msg = self.createProtocolPayload("x",  payloadObj)
+                return msg 
             elif opid == "x":
                 #Validate block , make state change, add to chain 
                 # Verify is all txns is signed by right person 
                 isValid = blockUtil.validateBlock(obj.get("block"))
                 #Replace with exceptions 
+                print("-----------VALIDITY OF PEER NODE",isValid)
                 if isValid:
                     self.chainInstance.addBlock(obj.get("block")) 
-                    
+                    print("******************************************")
+                    print("MINED A NEW BLOCK ====> ", obj.get("block").get("blockHash"))
+                    print("BLOCK CONTENTS ====>",obj.get("block"))
+                    print("******************************************")
+                    msg = self.createProtocolPayload("a", None)
+                    return msg
+
 
                 # None
             elif opid == "z":
@@ -59,7 +110,10 @@ class Protocol:
                 #Validate block , make state change, add to chain 
                 # Verify is all txns is signed by right person 
                 isValid = blockUtil.validateBlock(obj.get("block"))
+                print("-----------VALIDITY OF PEER NODE",isValid)
                 self.chainInstance.addBlock(obj.get("block"))
+                msg = self.createProtocolPayload("a", None)
+                return msg
 
                               
         else: 
@@ -83,16 +137,16 @@ class Protocol:
         message.append(stx)
         message.append(str(msg_len))
         message.append(str(opid))
-        message.append(str(payload))
+        message.append(payload)
         message.append(etx)
         # Display the message
-        print(message)
-        print("STX:", stx)
-        print("Message Length:", msg_len)
-        print("Operation ID:", opid)
-        print("Payload Object:", payload)
-        print("ETX:", message[-1])
-        print("ETX:", etx)
+        # print(message)
+        # print("STX:", stx)
+        # print("Message Length:", msg_len)
+        # print("Operation ID:", opid)
+        # print("Payload Object:", payload)
+        # print("ETX:", message[-1])
+        # print("ETX:", etx)
         return json.dumps(message)
 
 # objp = {"Key":"val","key2":"val2","Key3":"val","key4":"val2"}

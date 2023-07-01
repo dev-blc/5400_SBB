@@ -111,7 +111,13 @@ while True:
 
     if choice == "0":
         walletInstance = wallet.Wallet()
-        minerInstance = miner.Miner(walletInstance, chainInstance, "0")
+        stateInstance.setCurrentState("1")
+        minerInstance = miner.Miner(walletInstance, chainInstance, stateInstance, "0")
+        handler = threading.Thread(target=peerInstance.receiver)
+        handler.start()
+        commsInstance = protocolComms.protocolComms(stateInstance, protocolInstance, peerInstance)
+        handler2 = threading.Thread(target=commsInstance.executeStateHandlers)
+        handler2.start()
         localMenu()
     elif choice == "1": 
         print(" ------------------------ CONFIGURATION ------------------------ ")
@@ -128,10 +134,13 @@ while True:
                     # PROTOCOL
                     # print("whatbef")
                     walletInstance = wallet.Wallet()
+                    stateInstance.setCurrentState("1")
                     minerInstance = miner.Miner(walletInstance, chainInstance, stateInstance, txnChoice)
                     handler = threading.Thread(target=peerInstance.receiver)
                     handler.start()
-                    commsInstance = protocolComms.protocolComms(stateInstance, protocolInstance)
+                    commsInstance = protocolComms.protocolComms(stateInstance, protocolInstance, peerInstance)
+                    handler2 = threading.Thread(target=commsInstance.executeStateHandlers)
+                    handler2.start()
                     localMenu()
                     # activateInteraction(minerInstance,walletInstance)
                     # print("what")
@@ -145,7 +154,9 @@ while True:
                     minerInstance = miner.Miner(walletInstance, chainInstance, stateInstance, txnChoice)                    
                     handler = threading.Thread(target=peerInstance.receiver)
                     handler.start()
-                    commsInstance = protocolComms.protocolComms(stateInstance, protocolInstance)
+                    commsInstance = protocolComms.protocolComms(stateInstance, protocolInstance, peerInstance)
+                    handler2 = threading.Thread(target=commsInstance.executeStateHandlers)
+                    handler2.start()
                     localMenu()                     
 
             else:
@@ -155,7 +166,9 @@ while True:
                     minerInstance = miner.Miner(walletInstance, chainInstance, stateInstance, txnChoice)                                         
                     handler = threading.Thread(target=peerInstance.receiver)
                     handler.start()
-                    commsInstance = protocolComms.protocolComms(stateInstance, protocolInstance)
+                    commsInstance = protocolComms.protocolComms(stateInstance, protocolInstance, peerInstance)
+                    handler2 = threading.Thread(target=commsInstance.executeStateHandlers)
+                    handler2.start()
                     localMenu()
                     # time.sleep(10)
                     # print("Aftre10")
@@ -168,7 +181,9 @@ while True:
                     minerInstance = miner.Miner(walletInstance, chainInstance, stateInstance, txnChoice)                                    
                     handler = threading.Thread(target=peerInstance.receiver)
                     handler.start()
-                    commsInstance = protocolComms.protocolComms(stateInstance, protocolInstance)
+                    commsInstance = protocolComms.protocolComms(stateInstance, protocolInstance, peerInstance)
+                    handler2 = threading.Thread(target=commsInstance.executeStateHandlers)
+                    handler2.start()
                     localMenu()
         else:
             print("miner pot")
@@ -179,7 +194,9 @@ while True:
                     minerInstance = miner_PoT.MinerPoT(walletInstance, chainInstance, txnChoice)
                     handler = threading.Thread(target=peerInstance.receiver)
                     handler.start()
-                    commsInstance = protocolComms.protocolComms(stateInstance, protocolInstance)
+                    commsInstance = protocolComms.protocolComms(stateInstance, protocolInstance, peerInstance)
+                    handler2 = threading.Thread(target=commsInstance.executeStateHandlers)
+                    handler2.start()
                     localMenu()
                 else:
                     #CREATE INSTANCES
@@ -187,7 +204,9 @@ while True:
                     minerInstance = miner_PoT.MinerPoT(walletInstance, chainInstance, txnChoice)
                     handler = threading.Thread(target=peerInstance.receiver)
                     handler.start()
-                    commsInstance = protocolComms.protocolComms(stateInstance, protocolInstance)
+                    commsInstance = protocolComms.protocolComms(stateInstance, protocolInstance, peerInstance)
+                    handler2 = threading.Thread(target=commsInstance.executeStateHandlers)
+                    handler2.start()
                     localMenu()
             else:
                 if protocolChoice == "0":
@@ -196,7 +215,9 @@ while True:
                     minerInstance = miner_PoT.MinerPoT(walletInstance, chainInstance, txnChoice)
                     handler = threading.Thread(target=peerInstance.receiver)
                     handler.start()
-                    commsInstance = protocolComms.protocolComms(stateInstance, protocolInstance)
+                    commsInstance = protocolComms.protocolComms(stateInstance, protocolInstance, peerInstance)
+                    handler2 = threading.Thread(target=commsInstance.executeStateHandlers)
+                    handler2.start()
                     localMenu()
                 else:
                     #CREATE INSTANCES
@@ -204,7 +225,9 @@ while True:
                     minerInstance = miner_PoT.MinerPoT(walletInstance, chainInstance, txnChoice)
                     handler = threading.Thread(target=peerInstance.receiver)
                     handler.start()
-                    commsInstance = protocolComms.protocolComms(stateInstance, protocolInstance)
+                    commsInstance = protocolComms.protocolComms(stateInstance, protocolInstance, peerInstance)
+                    handler2 = threading.Thread(target=commsInstance.executeStateHandlers)
+                    handler2.start()
                     localMenu()
     elif choice == "M" or choice == "m":
         print("------------------------------- MONITORING -------------------------------")

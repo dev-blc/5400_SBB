@@ -14,6 +14,7 @@ class Chain:
 
     def addBlock(self, newBlock):
         self.blocks.append(newBlock)
+        
     
     def getLastBlock(self):
         return self.blocks[-1]
