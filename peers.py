@@ -37,7 +37,9 @@ class Peers:
             # print(f'Message [{data.decode()}] from [{address[0]}]:[{address[1]}]')
             msg = self.protocolInstance.processIncomingMessage(data.decode())
             # time.sleep(3)
-            self.broadcastMessage(msg)
+            #add if case for handling no messages
+            if msg != "00":
+                self.broadcastMessage(msg)
             if "exit" in data.decode():
                 sys.exit()
         

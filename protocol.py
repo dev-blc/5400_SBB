@@ -5,10 +5,12 @@ import state
 states = state.allStates
 emptyObj = json.dumps({})
 class Protocol:
-    def __init__(self, cI, sI) -> None:
+    def __init__(self, cI, sI, wI) -> None:
         self.temp = None
         self.chainInstance = cI
         self.stateInstance = sI
+        self.walletInstance = wI
+        self.pk = []
     def processIncomingMessage(self, jsonMsg):
         message = json.loads(jsonMsg)
         if message[0] == '\x02' and message[-1] == ('\x03'):
@@ -35,8 +37,8 @@ class Protocol:
                     # print("=======",msg)
                     return msg 
                 else: 
-                    msg = self.createProtocolPayload("a", None)
-                    return msg
+                    # msg = self.createProtocolPayload("a", None)
+                    return "0"
                 
             elif opid == "c":
                 if self.stateInstance.getCurrentState() == states.MINING:
@@ -65,9 +67,9 @@ class Protocol:
                         # msg = self.createProtocolPayload("a", None)
                 else:
                     
-                    msg = self.createProtocolPayload("a", None)
+                    # msg = self.createProtocolPayload("a", None)
                     # self.stateInstance.setCurrentState("1")
-                    return msg
+                    return "0"
             elif opid == "b":
                 state = self.stateInstance.getCurrentState()
                 if state == states.GBH:
@@ -78,8 +80,8 @@ class Protocol:
                     return msg 
                 else :
                     # self.stateInstance.setCurrentState("1")
-                    msg = self.createProtocolPayload("a", None)
-                    return msg
+                    # msg = self.createProtocolPayload("a", None)
+                    return "0"
                 
             elif opid == "h":
                 obj = json.loads(obj)
@@ -122,10 +124,21 @@ class Protocol:
                         return msg
                 else :
                     self.stateInstance.setCurrentState("1")
-                    msg = self.createProtocolPayload("a", None)
-                    return msg
+                    # msg = self.createProtocolPayload("a", None)
+                    return "0"
                 
+            elif opid == "g":
+                # SEND PK
+                myPK = self.walletInstance.getPublicKey()
+                payloadObj = {"PK":myPK}
+                # msg = self.createProtocolPayload("p",  json.dumps(payloadObj))
+                return "0" 
+            elif opid == "p":
+                obj = json.loads(obj)
+                self.pk.append(obj.get("PK"))
 
+                # msg = self.createProtocolPayload("a", None)
+                return "0"
 
                 # None
             elif opid == "z":
@@ -165,6 +178,8 @@ class Protocol:
     #             msg = self.protocolInstance.createProtocolPayload("h", None)
     #             self.peerInstance.broadcastMessage(msg)
     #         # time.sleep(20)
+    def getPeersPK(self):
+        return self.pk
 
     def createProtocolPayload(self, opId, payloadObject):
         # Define the message components
