@@ -68,6 +68,9 @@ Protocols and peers/ port map peers
 --> Document P1
 --> Document Path 
 
+---> TRY PoT FOR IONE LAST TIME 
+---> BYTE ENCODING???
+---> PROTOCOL FOR PoT
 
 // FLAWS 
 Redunant blocks possible
