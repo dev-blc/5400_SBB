@@ -18,51 +18,68 @@ class Protocol:
             # print("//",message[1:3])
             # print(">>>",message[14:-2])
             obj = json.loads(message[3])
-            
+            # self.executeStates()
+            # return self.opid,self.obj
             # Print the extracted components
             # print("STX:", stx)
             # print("Message Length:", msg_len)
             # print("Operation ID:", opid)
-            print("111111111Payload Object:", obj)
+            # print("111111111Payload Object:", obj)
             # print("ETX:", message[-1])
             if opid == "a": # GET_COUNT
-                print("====GET_COUNT====")
-                blockCount = self.chainInstance.getBlockCount()
-                payloadObj = {"blocks": blockCount}
-                msg = self.createProtocolPayload("c", json.dumps(payloadObj)) 
-                print("=======",msg)
-                return msg 
-            elif opid == "c":
-                obj = json.loads(obj)
-                peerBlockCount = int(obj.get("blocks"))
-                localBlockCount = int(self.chainInstance.getBlockCount())
-                print("||||||",localBlockCount,peerBlockCount)
-                if peerBlockCount > localBlockCount:
-                    
-                    self.stateInstance.setCurrentState("2") # Check state instance impl
-                    print("========= REQUEST NEW BLOCK HASHES")
-                    msg = self.createProtocolPayload("b", emptyObj)# Here or in stateActions()?
-                    print(msg)
+                # print("====GET_COUNT====")
+                if self.stateInstance.getCurrentState() == states.MINING:
+                    blockCount = self.chainInstance.getBlockCount()
+                    payloadObj = {"blocks": blockCount}
+                    msg = self.createProtocolPayload("c", json.dumps(payloadObj)) 
+                    # print("=======",msg)
                     return msg 
-                elif peerBlockCount == localBlockCount:
-                    self.stateInstance.setCurrentState("1")
+                else: 
                     msg = self.createProtocolPayload("a", None)
                     return msg
-                else :
-                    block = self.chainInstance.getLastBlock()
-                    self.stateInstance.setCurrentState("1")
-                    payloadObj = {"block": block}
-                    msg = self.createProtocolPayload("z",  payloadObj)
-                    return msg 
-                    # msg = self.createProtocolPayload("a", None)
+                
+            elif opid == "c":
+                if self.stateInstance.getCurrentState() == states.MINING:
+                    obj = json.loads(obj)
+                    peerBlockCount = int(obj.get("blocks"))
+                    localBlockCount = int(self.chainInstance.getBlockCount())
+                    # print("||||||",localBlockCount,peerBlockCount)
+                    if peerBlockCount > localBlockCount:
+                        
+                        self.stateInstance.setCurrentState("2") # Check state instance impl
+                        # print("========= REQUEST NEW BLOCK HASHES")
+                        msg = self.createProtocolPayload("b", json.dumps(emptyObj))# Here or in stateActions()?
+                        print(msg)
+                        return msg 
+                    elif peerBlockCount == localBlockCount:
+                        self.stateInstance.setCurrentState("1")
+                        msg = self.createProtocolPayload("a", None)
+                        return msg
+                    else :
+                        block = self.chainInstance.getLastBlock()
+                        
+                        payloadObj = {"block": block}
+                        msg = self.createProtocolPayload("z",  json.dumps(payloadObj))
+                        self.stateInstance.setCurrentState("1")
+                        return msg 
+                        # msg = self.createProtocolPayload("a", None)
+                else:
+                    
+                    msg = self.createProtocolPayload("a", None)
+                    # self.stateInstance.setCurrentState("1")
+                    return msg
             elif opid == "b":
                 state = self.stateInstance.getCurrentState()
                 if state == states.GBH:
                     self.stateInstance.setCurrentState("3")
-                blockHashes = self.chainInstance.getBlockHashes()
-                payloadObj = {"blockHashes": blockHashes}
-                msg = self.createProtocolPayload("h",  json.dumps(payloadObj))  #BLOCK_HASHES
-                return msg 
+                    blockHashes = self.chainInstance.getBlockHashes()
+                    payloadObj = {"blockHashes": blockHashes}
+                    msg = self.createProtocolPayload("h",  json.dumps(payloadObj))  #BLOCK_HASHES
+                    return msg 
+                else :
+                    # self.stateInstance.setCurrentState("1")
+                    msg = self.createProtocolPayload("a", None)
+                    return msg
                 
             elif opid == "h":
                 obj = json.loads(obj)
@@ -86,38 +103,68 @@ class Protocol:
                 obj = json.loads(obj)
                 block = self.chainInstance.getBlock(obj.get("hash"))
                 payloadObj = {"block": block}
-                msg = self.createProtocolPayload("x",  payloadObj)
+                msg = self.createProtocolPayload("x",  json.dumps(payloadObj))
                 return msg 
             elif opid == "x":
                 #Validate block , make state change, add to chain 
                 # Verify is all txns is signed by right person 
-                isValid = blockUtil.validateBlock(obj.get("block"))
-                #Replace with exceptions 
-                print("-----------VALIDITY OF PEER NODE",isValid)
-                if isValid:
-                    self.chainInstance.addBlock(obj.get("block")) 
-                    print("******************************************")
-                    print("MINED A NEW BLOCK ====> ", obj.get("block").get("blockHash"))
-                    print("BLOCK CONTENTS ====>",obj.get("block"))
-                    print("******************************************")
+                if obj.get("block").get("blockHash") not in self.chainInstance.getBlockHashes():
+                    isValid = blockUtil.validateBlock(obj.get("block"))
+                    #Replace with exceptions 
+                    print("-----------VALIDITY OF PEER NODE BLOCK ",isValid)
+                    if isValid:
+                        self.chainInstance.addBlock(obj.get("block")) 
+                        print("******************************************")
+                        print("MINED// A NEW BLOCK ====> ", obj.get("block").get("blockHash"))
+                        print("BLOCK CONTENTS ====>",obj.get("block"))
+                        print("******************************************")
+                        msg = self.createProtocolPayload("a", None)
+                        return msg
+                else :
+                    self.stateInstance.setCurrentState("1")
                     msg = self.createProtocolPayload("a", None)
                     return msg
+                
 
 
                 # None
             elif opid == "z":
+                obj = json.loads(obj)
                 block = obj
                 #Validate block , make state change, add to chain 
                 # Verify is all txns is signed by right person 
-                isValid = blockUtil.validateBlock(obj.get("block"))
-                print("-----------VALIDITY OF PEER NODE",isValid)
-                self.chainInstance.addBlock(obj.get("block"))
-                msg = self.createProtocolPayload("a", None)
-                return msg
+                if obj.get("block").get("blockHash") not in self.chainInstance.getBlockHashes():
+                    isValid = blockUtil.validateBlock(obj.get("block"))
+                    print("-----------VALIDITY OF PEER NODE BLOCK ",isValid)
+                    self.chainInstance.addBlock(obj.get("block"))
+                    print("******************************************")
+                    print("MINED/// A NEW BLOCK ====> ", obj.get("block").get("blockHash"))
+                    print("BLOCK CONTENTS ====>",obj.get("block"))
+                    print("******************************************")
+                    self.stateInstance.setCurrentState("1")
+                    msg = self.createProtocolPayload("a", None)
+                    return msg
+                else :
+                    self.stateInstance.setCurrentState("1")
+                    msg = self.createProtocolPayload("a", None)
+                    return msg
 
                               
         else: 
             print("Invalid message format.")
+
+    # def executeStates(self):
+    #     while True:
+    #         state = self.stateInstance.getCurrentState()
+    #         if state == states.MINING:
+    #             # print("+++++++InsideMining")
+    #             msg = self.protocolInstance.createProtocolPayload("a", None)
+    #             self.peerInstance.broadcastMessage(msg)
+    #         elif state == states.GBH:
+    #             # print("+++++++InsideGBH")
+    #             msg = self.protocolInstance.createProtocolPayload("h", None)
+    #             self.peerInstance.broadcastMessage(msg)
+    #         # time.sleep(20)
 
     def createProtocolPayload(self, opId, payloadObject):
         # Define the message components
@@ -148,6 +195,9 @@ class Protocol:
         # print("ETX:", message[-1])
         # print("ETX:", etx)
         return json.dumps(message)
+
+    # def getMessages(self):
+    #     return self.opid, self.obj
 
 # objp = {"Key":"val","key2":"val2","Key3":"val","key4":"val2"}
 # pI = Protocol()

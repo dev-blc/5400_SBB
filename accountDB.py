@@ -36,7 +36,7 @@ class AccountModel:
         temp = 0
         for block in chain:
             # print("////In Block", block.get("block_no") )
-            txns = block.get("Transaction")
+            txns = block.get("Transactions")
             # txn = txns[-1]
             for txn in txns:
                 if txn.get("To") == str(address):

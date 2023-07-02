@@ -63,3 +63,12 @@ Protocols and peers/ port map peers
 -> Replace errors with exceptions
 -> Remove instances from params instead use getInstances() // Not working or idk ?
 -> UTXO db
+
+--> Figure out Submission methods 
+--> Document P1
+--> Document Path 
+
+
+// FLAWS 
+Redunant blocks possible
+Late Sync and block looping

@@ -37,7 +37,7 @@ class Transaction:
         chain = self.chainInstance.getChain()
         for block in chain:
             # print("////In Block", block.get("block_no") )
-            txns = block.get("Transaction")
+            txns = block.get("Transactions")
             # txn = txns[-1]
             flag = False
             for txn in txns:

@@ -5,6 +5,7 @@ class Chain:
     def __init__(self):
         self.blocks = []
         self.balances = {None}
+        self.altBlocks = []
         
     
     # def addBalance(self, publicKey):
@@ -14,7 +15,9 @@ class Chain:
 
     def addBlock(self, newBlock):
         self.blocks.append(newBlock)
-        
+
+    def addPeerBlock(self, newBlock):
+        self.altBlocks.append(newBlock)
     
     def getLastBlock(self):
         return self.blocks[-1]

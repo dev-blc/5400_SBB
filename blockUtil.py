@@ -4,8 +4,8 @@ def validateBlock(block):
     for txn in txns:
         pk = txn.get('From')
         sign = txn.get('Sign')
-        print(txn)
-        print(pk,sign)
+        # print(txn)
+        # print(pk,sign)
         if sign != None:
             isSignValid = pk.verify(sign, pk)
             if not isSignValid:

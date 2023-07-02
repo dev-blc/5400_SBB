@@ -34,10 +34,10 @@ class Peers:
         # self.sock.bind(('127.0.0.1',self.port))
         while True:
             data, address = self.sock.recvfrom(1024)
-            print(f'Message [{data.decode()}] from [{address[0]}]:[{address[1]}]')
+            # print(f'Message [{data.decode()}] from [{address[0]}]:[{address[1]}]')
             msg = self.protocolInstance.processIncomingMessage(data.decode())
+            # time.sleep(3)
             self.broadcastMessage(msg)
             if "exit" in data.decode():
                 sys.exit()
-        
         

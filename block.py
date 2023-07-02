@@ -11,12 +11,12 @@ class Block:
         self.blockNo = 0
         # self.hash = 0
     
-    def addBlock(self, bno, prev, ts, transactions):
+    def addBlock(self, prev, ts, transactions):
         self.prevHash = prev
         # self.nonce = 0
         self.timestamp = ts
         self.transactions = transactions
-        self.blockNo = bno #+= 1
+        # self.blockNo = bno #+= 1
 
     def increaseNonce(self):
         self.nonce += 1
@@ -30,7 +30,6 @@ class Block:
     
     def getCurrentBlock(self):
         blockObj = {
-            "block_no" : self.blockNo,
             "nonce" : self.nonce,
             "prevHash" : self.prevHash,
             "Transactions" : self.transactions,
