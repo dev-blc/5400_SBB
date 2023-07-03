@@ -113,7 +113,7 @@ while True:
     if choice == "0":
         # walletInstance = wallet.Wallet()
         stateInstance.setCurrentState("1")
-        minerInstance = miner.Miner(walletInstance, chainInstance, stateInstance, "0")
+        minerInstance = miner.Miner(walletInstance, chainInstance, stateInstance, protocolInstance, peerInstance, "0")
         handler = threading.Thread(target=peerInstance.receiver)
         handler.start()
         commsInstance = protocolComms.protocolComms(stateInstance, protocolInstance, peerInstance)
@@ -136,7 +136,7 @@ while True:
                     # print("whatbef")
                     # walletInstance = wallet.Wallet()
                     stateInstance.setCurrentState("1")
-                    minerInstance = miner.Miner(walletInstance, chainInstance, stateInstance, txnChoice)
+                    minerInstance = miner.Miner(walletInstance, chainInstance, stateInstance, protocolInstance, peerInstance, txnChoice)
                     handler = threading.Thread(target=peerInstance.receiver)
                     handler.start()
                     commsInstance = protocolComms.protocolComms(stateInstance, protocolInstance, peerInstance)
@@ -153,7 +153,7 @@ while True:
                     #CREATE INSTANCES
                     # walletInstance = wallet.Wallet() #CHANGE WALLET FOR UTXO?
                     stateInstance.setCurrentState("1")
-                    minerInstance = miner.Miner(walletInstance, chainInstance, stateInstance, txnChoice)                    
+                    minerInstance = miner.Miner(walletInstance, chainInstance, stateInstance, protocolInstance, peerInstance, txnChoice)
                     handler = threading.Thread(target=peerInstance.receiver)
                     handler.start()
                     commsInstance = protocolComms.protocolComms(stateInstance, protocolInstance, peerInstance)
@@ -166,7 +166,7 @@ while True:
                     #CREATE INSTANCES#CHANGE WALLET FOR UTXO?
                     stateInstance.setCurrentState("1")
                     # walletInstance = wallet.Wallet() #CHANGE WALLET FOR UTXO?
-                    minerInstance = miner.Miner(walletInstance, chainInstance, stateInstance, txnChoice)                                         
+                    minerInstance = miner.Miner(walletInstance, chainInstance, stateInstance, protocolInstance, peerInstance, txnChoice)
                     handler = threading.Thread(target=peerInstance.receiver)
                     handler.start()
                     commsInstance = protocolComms.protocolComms(stateInstance, protocolInstance, peerInstance)
@@ -182,7 +182,7 @@ while True:
                     #CREATE INSTANCES
                     # walletInstance = wallet.Wallet() #CHANGE WALLET FOR UTXO?
                     stateInstance.setCurrentState("1")
-                    minerInstance = miner.Miner(walletInstance, chainInstance, stateInstance, txnChoice)                                    
+                    minerInstance = miner.Miner(walletInstance, chainInstance, stateInstance, protocolInstance, peerInstance, txnChoice)
                     handler = threading.Thread(target=peerInstance.receiver)
                     handler.start()
                     commsInstance = protocolComms.protocolComms(stateInstance, protocolInstance, peerInstance)
@@ -196,7 +196,7 @@ while True:
                     #CREATE INSTANCES
                     # walletInstance = wallet.Wallet() #CHANGE WALLET FOR UTXO?
                     stateInstance.setCurrentState("1")
-                    minerInstance = miner_PoT.MinerPoT(walletInstance, chainInstance,protocolInstance,  txnChoice)
+                    minerInstance = miner_PoT.MinerPoT(walletInstance, chainInstance,protocolInstance, peerInstance ,txnChoice)
                     handler = threading.Thread(target=peerInstance.receiver)
                     handler.start()
                     peerInstance.broadcastMessage(minerInstance.initProtocol())
@@ -208,7 +208,7 @@ while True:
                     #CREATE INSTANCES
                     # walletInstance = wallet.Wallet() #CHANGE WALLET FOR UTXO?
                     stateInstance.setCurrentState("1")
-                    minerInstance = miner_PoT.MinerPoT(walletInstance, chainInstance,protocolInstance,  txnChoice)
+                    minerInstance = miner_PoT.MinerPoT(walletInstance, chainInstance,protocolInstance, peerInstance ,txnChoice)
                     handler = threading.Thread(target=peerInstance.receiver)
                     handler.start()
                     peerInstance.broadcastMessage(minerInstance.initProtocol())
@@ -221,7 +221,7 @@ while True:
                     #CREATE INSTANCES
                     # walletInstance = wallet.Wallet() #CHANGE WALLET FOR UTXO?
                     stateInstance.setCurrentState("1")
-                    minerInstance = miner_PoT.MinerPoT(walletInstance, chainInstance,protocolInstance, txnChoice)
+                    minerInstance = miner_PoT.MinerPoT(walletInstance, chainInstance,protocolInstance, peerInstance ,txnChoice)
                     handler = threading.Thread(target=peerInstance.receiver)
                     handler.start()
                     peerInstance.broadcastMessage(minerInstance.initProtocol())
@@ -233,7 +233,7 @@ while True:
                     #CREATE INSTANCES
                     # walletInstance = wallet.Wallet() #CHANGE WALLET FOR UTXO?
                     stateInstance.setCurrentState("1")
-                    minerInstance = miner_PoT.MinerPoT(walletInstance, chainInstance,protocolInstance, txnChoice)
+                    minerInstance = miner_PoT.MinerPoT(walletInstance, chainInstance,protocolInstance, peerInstance ,txnChoice)
                     handler = threading.Thread(target=peerInstance.receiver)
                     handler.start()
                     peerInstance.broadcastMessage(minerInstance.initProtocol())

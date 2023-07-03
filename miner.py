@@ -1,3 +1,4 @@
+import json
 import threading
 import wallet
 import block
@@ -14,13 +15,15 @@ States = state.allStates
 # # blockInstance = block.Block()
 # blockInstance = block.Block()
 class Miner:
-    def __init__(self, walletI, chainI, stateI, txnModel):
+    def __init__(self, walletI, chainI, stateI, protocolI, peerI, txnModel):
         self.walletInstance = walletI
         # self.blockInstance = blockI
         self.chainInstance = chainI
         self.dbInstance = accountDB.AccountModel(chainI)
         self.stateInstance = stateI
         self.blockTime = []
+        self.protocolInstance = protocolI
+        self.peerInstance = peerI
         self.txnType = txnModel
         thread = threading.Thread(target=self.run)
         thread.start()
@@ -47,7 +50,7 @@ class Miner:
                 txnObj = self.txnInstance.getTxns()
                 ts= time.time()
                 self.blockInstance = block.Block()
-                if count == 0 : 
+                if self.chainInstance.getBlockCount() == 0 : 
                     self.blockInstance.addBlock(0,ts,txnObj)
                     print("inside0")
                     count += 1
@@ -72,6 +75,11 @@ class Miner:
                         print("BLOCK CONTENTS ====>",blockObj)
                         print("******************************************")
                         self.chainInstance.addBlock(blockObj)
+                        payloadObj = {"block": blockObj}
+                        msg = self.protocolInstance.createProtocolPayload("z",  json.dumps(payloadObj))
+                        self.peerInstance.broadcastMessage(msg)
+
+                        # self.protocolInstance.createProtocolPayload
 
                         # print(chainInstance.getLastBlock())
                         break

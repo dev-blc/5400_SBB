@@ -11,6 +11,7 @@ class Protocol:
         self.stateInstance = sI
         self.walletInstance = wI
         self.pk = []
+        self.pk.append(self.walletInstance.getPublicKey())
     def processIncomingMessage(self, jsonMsg):
         message = json.loads(jsonMsg)
         if message[0] == '\x02' and message[-1] == ('\x03'):
@@ -115,7 +116,14 @@ class Protocol:
                     #Replace with exceptions 
                     print("-----------VALIDITY OF PEER NODE BLOCK ",isValid)
                     if isValid:
-                        self.chainInstance.addBlock(obj.get("block")) 
+                        blockObj = obj.get("block")
+                        if self.chainInstance.getBlockCount() == 0:
+                            blockObj["prevHash"] = "0"
+                        else:
+                            prevHash = self.chainInstance.getLastBlock().get("blockHash")
+                            blockObj["prevHash"] = prevHash
+
+                        self.chainInstance.addBlock(blockObj) 
                         print("******************************************")
                         print("MINED// A NEW BLOCK ====> ", obj.get("block").get("blockHash"))
                         print("BLOCK CONTENTS ====>",obj.get("block"))
@@ -129,14 +137,18 @@ class Protocol:
                 
             elif opid == "g":
                 # SEND PK
+               
                 myPK = self.walletInstance.getPublicKey()
+                # print("inG===>",myPK)
                 payloadObj = {"PK":myPK}
-                # msg = self.createProtocolPayload("p",  json.dumps(payloadObj))
-                return "0" 
+                msg = self.createProtocolPayload("p",  json.dumps(payloadObj))
+                return msg 
             elif opid == "p":
+                print("inP")
+
                 obj = json.loads(obj)
                 self.pk.append(obj.get("PK"))
-
+                # print("inG===>",obj.get("PK"))
                 # msg = self.createProtocolPayload("a", None)
                 return "0"
 
@@ -149,7 +161,14 @@ class Protocol:
                 if obj.get("block").get("blockHash") not in self.chainInstance.getBlockHashes():
                     isValid = blockUtil.validateBlock(obj.get("block"))
                     print("-----------VALIDITY OF PEER NODE BLOCK ",isValid)
-                    self.chainInstance.addBlock(obj.get("block"))
+                    blockObj = obj.get("block")
+                    if self.chainInstance.getBlockCount() == 0:
+                        blockObj["prevHash"] = "0"
+                    else:
+                        prevHash = self.chainInstance.getLastBlock().get("blockHash")
+                        blockObj["prevHash"] = prevHash
+
+                    self.chainInstance.addBlock(blockObj) 
                     print("******************************************")
                     print("MINED/// A NEW BLOCK ====> ", obj.get("block").get("blockHash"))
                     print("BLOCK CONTENTS ====>",obj.get("block"))
@@ -161,7 +180,7 @@ class Protocol:
                     self.stateInstance.setCurrentState("1")
                     msg = self.createProtocolPayload("a", None)
                     return msg
-
+    #CHNAGE _ ADD PREV BLOCK HASH TP CURRENT OBJ 
                               
         else: 
             print("Invalid message format.")
