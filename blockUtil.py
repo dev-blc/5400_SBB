@@ -3,10 +3,12 @@ def validateBlock(block):
     isSignValid = False
     for txn in txns:
         pk = txn.get('From')
-        sign = txn.get('Sign')
+        
+        # print("from ====>",pk)
         # print(txn)
         # print(pk,sign)
-        if sign != None:
+        if pk != "0" and pk != None:
+            sign = bytes.fromhex(txn.get('Sign'))
             isSignValid = pk.verify(sign, pk)
             if not isSignValid:
                 print("!!!!!!!!!!!!!! INVALID TXN IN THE BLOCK !!!!!!!!!!!!!!")

@@ -76,6 +76,7 @@ class Miner:
                         print("******************************************")
                         self.chainInstance.addBlock(blockObj)
                         payloadObj = {"block": blockObj}
+                        
                         msg = self.protocolInstance.createProtocolPayload("z",  json.dumps(payloadObj))
                         self.peerInstance.broadcastMessage(msg)
 
@@ -97,8 +98,8 @@ class Miner:
         # self.txnInstance.createTxn(str(sender), str(to))
         # print("NEW TRANSACTION REQUEST FROM ============>",sender)
         # print("bno",self.bno)
-        
-        isValid = self.walletInstance.verifySign(sign)
+        signBytes = bytes.fromhex(sign)
+        isValid = self.walletInstance.verifySign(signBytes)
         if isValid:
             if self.walletInstance.checkBalance(self.chainInstance) >= 1:
                 self.txnInstance.createTxn(str(sender), str(to), sign )

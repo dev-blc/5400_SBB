@@ -11,7 +11,8 @@ class Wallet:
     def getPrivateKey(self):
         return self.sk
     def verifySign(self, sign):
-        return self.vk.verify(sign, (self.vk.to_string().hex()).encode('utf-8'))
+        signN = sign
+        return self.vk.verify(signN, (self.vk.to_string().hex()).encode('utf-8'))
     def checkBalance(self,chainI):
         chain = chainI.getChain()
         #parse chain

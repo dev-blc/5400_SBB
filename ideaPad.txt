@@ -68,10 +68,11 @@ Protocols and peers/ port map peers
 --> Document P1
 --> Document Path 
 
----> TRY PoT FOR IONE LAST TIME 
----> BYTE ENCODING???
----> PROTOCOL FOR PoT
+---> TRY PoT FOR ONE LAST TIME //DONE HALF
+---> BYTE ENCODING??? //PENDING
+---> PROTOCOL FOR PoT   //DONE
 ---> 
 // FLAWS 
-Redunant blocks possible
-Late Sync and block looping
+Redunant blocks possible - FIXED
+Late Sync and block looping - FIXED 90%
+MESSY SYNC

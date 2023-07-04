@@ -45,10 +45,10 @@ def localMenu():
     while True:
         print("MENU")
         print("1. Check Balance")
-        print("2. TXN")
-        print("3. TXN DOS")
+        print("2. TXN Trial")
+        print("3. TXN Custom")
         print("4. AVG BlockTime")
-        print("5. Send Message")
+        # print("5. Send Message")
         print("0. Exit")
 
         choice = input("Enter your choice: ")
@@ -57,12 +57,15 @@ def localMenu():
             print(minerInstance.dbInstance.balances)
         elif choice == "2":
             sign = walletInstance.getPrivateKey().sign(walletInstance.getPublicKey().encode('utf-8'))
-            minerInstance.addTxn(walletInstance.getPublicKey(), "640c8d9619bb9f46bf9e29010dddcaddbadd05f201a6a2f5f9de3e4ed7f1cde320f21b097b6b650e08cacdc14fde630ad0869155a46c3af04014fc96e93e3fb1", sign)
-        # elif choice == "3":
-        #     wI, cI, mI = initInstance.fetchInstances()  
-        #     to = input("Enter to address: ") 
-        #     sign = wI.getPrivateKey().sign(wI.getPublicKey().encode('utf-8'))
-        #     mI.addTxn(wI.getPublicKey(), to, sign)
+            signHex = sign.hex()
+            # print(type(signHex),signHex)
+            minerInstance.addTxn(walletInstance.getPublicKey(), "640c8d9619bb9f46bf9e29010dddcaddbadd05f201a6a2f5f9de3e4ed7f1cde320f21b097b6b650e08cacdc14fde630ad0869155a46c3af04014fc96e93e3fb1", signHex)
+        elif choice == "3": 
+            to = input("Enter to address: ") 
+            sign = walletInstance.getPrivateKey().sign(walletInstance.getPublicKey().encode('utf-8'))
+            # print(type(sign))
+            signHex = sign.hex()
+            minerInstance.addTxn(walletInstance.getPublicKey(), to, signHex)
         # elif choice == "4":
         #     wI, cI, mI = initInstance.fetchInstances()  
         #     to = input("Enter to address: ") 

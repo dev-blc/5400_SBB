@@ -52,7 +52,7 @@ class Protocol:
                         self.stateInstance.setCurrentState("2") # Check state instance impl
                         # print("========= REQUEST NEW BLOCK HASHES")
                         msg = self.createProtocolPayload("b", json.dumps(emptyObj))# Here or in stateActions()?
-                        print(msg)
+                        # print(msg)
                         return msg 
                     elif peerBlockCount == localBlockCount:
                         self.stateInstance.setCurrentState("1")
@@ -144,7 +144,7 @@ class Protocol:
                 msg = self.createProtocolPayload("p",  json.dumps(payloadObj))
                 return msg 
             elif opid == "p":
-                print("inP")
+                # print("inP")
 
                 obj = json.loads(obj)
                 self.pk.append(obj.get("PK"))
@@ -159,6 +159,7 @@ class Protocol:
                 #Validate block , make state change, add to chain 
                 # Verify is all txns is signed by right person 
                 if obj.get("block").get("blockHash") not in self.chainInstance.getBlockHashes():
+                    print(obj.get("block"))
                     isValid = blockUtil.validateBlock(obj.get("block"))
                     print("-----------VALIDITY OF PEER NODE BLOCK ",isValid)
                     blockObj = obj.get("block")

@@ -1,4 +1,5 @@
 import hashlib
+import ecdsa
 # ACCOUNT MODEL TXN
 
 class Transaction:
@@ -26,7 +27,9 @@ class Transaction:
     def createTxn(self, sender, to, sign):
         self.fromAccount = sender
         self.toAccount = to
-        self.sign = sign 
+        
+        self.sign = sign
+        # print(type(sign),sign)
         self.txnHash = hashlib.sha256(repr(self.fromAccount + self.toAccount).encode('utf-8')).hexdigest()
         self.transactions.append({
             "TXN_Hash": self.txnHash,

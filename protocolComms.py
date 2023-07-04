@@ -15,10 +15,10 @@ class protocolComms:
                 # print("+++++++InsideMining")
                 msg = self.protocolInstance.createProtocolPayload("a", None)
                 self.peerInstance.broadcastMessage(msg)
-            elif state == states.GBH:
-                # print("+++++++InsideGBH")
-                msg = self.protocolInstance.createProtocolPayload("h", None)
-                self.peerInstance.broadcastMessage(msg)
+            # elif state == states.GBH:
+            #     # print("+++++++InsideGBH")
+            #     msg = self.protocolInstance.createProtocolPayload("h", None)
+            #     self.peerInstance.broadcastMessage(msg)
             # time.sleep(20)
 
     def broadcastDivert(self, msg):

@@ -7,15 +7,19 @@ import time
 import transaction
 import chain
 import blockUtil
+import accountDB
+import transactionUTXO
 
 class MinerPoT:
     def __init__(self, walletI, chainI, pI, peerI ,txnMode):
         self.walletInstance = walletI
         # self.blockInstance = blockI
         self.chainInstance = chainI
+        self.dbInstance = accountDB.AccountModel(chainI)
         self.protocolInstance = pI
         self.peerInstance = peerI
         self.blockTime = []
+        self.txnType = txnMode
         # msg = self.protocolInstance.createProtocolPayload("g", json.dumps({}))
 
         thread = threading.Thread(target=self.run)
@@ -47,7 +51,7 @@ class MinerPoT:
         nextMiner = 0
         while(True):
             peers = self.protocolInstance.getPeersPK()
-            print(set(peers))
+            # print(set(peers))
             if len(set(peers)) == 2: #4 #HARDCODED
                 min = self.calcTruncatedHash(peers[0]) #CAN ONLY GET AS MESG
                 nextMiner = peers[0]
@@ -74,16 +78,22 @@ class MinerPoT:
                 msg = self.initProtocol()
                 self.peerInstance.broadcastMessage(msg)
 
-            print("////",nextMiner)
+            print("////NEXT MINER IS ====>",nextMiner)
             
 
     def mineNextBlock(self):
-        self.txnInstance = transaction.Transaction()
-        rewardTxn = self.addTxn(str(0),self.walletInstance.getPublicKey(), None)
+        if self.txnType == "0":
+            #acc
+            self.txnInstance = transaction.Transaction(self.dbInstance)
+        else:
+            #utxo
+            self.txnInstance = transactionUTXO.Transaction(self.chainInstance)
+        rewardTxn = self.txnInstance.sendMinerRewards(self.walletInstance.getPublicKey())
         txnObj = self.txnInstance.getTxns()
         ts= time.time()
         self.blockInstance = block.Block()
         bno = self.chainInstance.getBlockCount()
+        # print('BNO====>', bno)
         if bno == 0 : 
             self.blockInstance.addBlock(0,ts,txnObj)
             # print("inside0")
@@ -95,7 +105,7 @@ class MinerPoT:
 
             self.blockInstance.addBlock(prev,ts,txnObj)
         bHash = self.blockInstance.calculateHash()
-        blockObj = self.chainInstance.getLastBlock()
+        blockObj = self.blockInstance.getCurrentBlock()
         isValid = blockUtil.validateBlock(blockObj)
         if isValid:
             print("BLOCK FOUND =====> ", bHash)
@@ -104,6 +114,10 @@ class MinerPoT:
             payloadObj = {"block": blockObj}
             msg = self.protocolInstance.createProtocolPayload("z",  json.dumps(payloadObj))
             self.peerInstance.broadcastMessage(msg)
+
+    # def addTxn(self, sender, to, sign):
+
+
         
         
 
