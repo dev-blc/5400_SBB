@@ -52,7 +52,7 @@ class MinerPoT:
         while(True):
             peers = self.protocolInstance.getPeersPK()
             # print(set(peers))
-            if len(set(peers)) == 2: #4 #HARDCODED
+            if len(set(peers)) == 4: #4 #HARDCODED
                 min = self.calcTruncatedHash(peers[0]) #CAN ONLY GET AS MESG
                 nextMiner = peers[0]
                 count = 0
@@ -74,7 +74,7 @@ class MinerPoT:
                     # payloadObj = {"nextMiner": nextMiner}
                     msg = self.protocolInstance.createProtocolPayload("n", json.dumps(payloadObj))
             else:
-                time.sleep(2)
+                # time.sleep(2)
                 msg = self.initProtocol()
                 self.peerInstance.broadcastMessage(msg)
 
@@ -103,6 +103,7 @@ class MinerPoT:
             prev = chainBlock.get("blockHash")
             # self.bno = chainBlock.get("block_no") + 1
 
+          
             self.blockInstance.addBlock(prev,ts,txnObj)
         bHash = self.blockInstance.calculateHash()
         blockObj = self.blockInstance.getCurrentBlock()
@@ -115,8 +116,18 @@ class MinerPoT:
             msg = self.protocolInstance.createProtocolPayload("z",  json.dumps(payloadObj))
             self.peerInstance.broadcastMessage(msg)
 
-    # def addTxn(self, sender, to, sign):
+    def addTxn(self, sender, to, sign):
+        signBytes = bytes.fromhex(sign)
+        isValid = self.walletInstance.verifySign(signBytes)
+        if isValid:
+            if self.walletInstance.checkBalance(self.chainInstance) >= 1:
+                self.txnInstance.createTxn(str(sender), str(to), sign )
+            else: 
+                print("************** BALANCE NOT ENOUGH **************")
+        else:
+            print("************** INVALID SIGNATURE **************")
 
+        return self.txnInstance.getCurrentTxn()
 
         
         
